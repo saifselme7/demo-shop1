@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Link, useNavigate } from 'react-router-dom'
 import { useCart, cartTotal, cartCount } from '../../store/cart'
 import { formatPrice } from '../../lib/utils'
+import SafeImage from '../ui/SafeImage'
 
 export default function CartDrawer() {
   const { items, isOpen, close, removeItem, updateQuantity } = useCart()
@@ -37,7 +38,7 @@ export default function CartDrawer() {
               <span className="text-[12px] uppercase tracking-wide-lg">
                 Cart <span className="text-muted">({count})</span>
               </span>
-              <button onClick={close} className="text-[12px] uppercase tracking-wide-lg link-line" data-cursor="hover">
+              <button onClick={close} className="text-[12px] uppercase tracking-wide-lg link-line min-h-[44px]" data-cursor="hover">
                 Close
               </button>
             </div>
@@ -52,7 +53,7 @@ export default function CartDrawer() {
                 <Link
                   to="/shop"
                   onClick={close}
-                  className="btn-underline text-[11px] uppercase tracking-wide-lg mt-2"
+                  className="btn-underline text-[11px] uppercase tracking-wide-lg mt-2 min-h-[44px] flex items-center"
                   data-cursor="hover"
                 >
                   Browse the collection
@@ -68,25 +69,25 @@ export default function CartDrawer() {
                       className="flex gap-4 border-b border-line py-6"
                     >
                       <Link to={`/product/${item.slug}`} onClick={close} className="block h-28 w-[88px] shrink-0 overflow-hidden bg-cream">
-                        <img src={item.image} alt={item.name} className="h-full w-full object-cover" loading="lazy" decoding="async" />
+                        <SafeImage src={item.image} alt={item.name} className="h-full w-full" />
                       </Link>
-                      <div className="flex flex-1 flex-col justify-between">
+                      <div className="flex flex-1 flex-col justify-between min-w-0">
                         <div>
                           <div className="flex justify-between gap-4">
-                            <h3 className="font-display text-[15px] font-medium leading-tight">{item.name}</h3>
+                            <h3 className="font-display text-[15px] font-medium leading-tight truncate">{item.name}</h3>
                             <button
                               onClick={() => removeItem(item.id, item.size, item.color)}
-                              className="text-[10px] uppercase tracking-wide-lg text-muted link-line"
+                              className="text-[10px] uppercase tracking-wide-lg text-muted link-line shrink-0 min-h-[28px]"
                               data-cursor="hover"
                             >
                               Remove
                             </button>
                           </div>
-                          <p className="mt-1 text-[12px] text-muted">
+                          <p className="mt-1 text-[12px] text-muted truncate">
                             {item.color} — Size {item.size}
                           </p>
                         </div>
-                        <div className="flex items-end justify-between">
+                        <div className="flex items-end justify-between gap-2">
                           <div className="flex items-center border border-line">
                             <button
                               onClick={() => updateQuantity(item.id, item.size, item.color, item.quantity - 1)}
@@ -106,7 +107,7 @@ export default function CartDrawer() {
                               +
                             </button>
                           </div>
-                          <span className="text-[14px] tabular-nums font-medium">{formatPrice(item.price * item.quantity, item.currency)}</span>
+                          <span className="text-[14px] tabular-nums font-medium shrink-0">{formatPrice(item.price * item.quantity, item.currency)}</span>
                         </div>
                       </div>
                     </motion.div>
@@ -125,7 +126,7 @@ export default function CartDrawer() {
                   <p className="mb-4 text-[11px] text-muted">Shipping and duties calculated at checkout.</p>
                   <button
                     onClick={handleCheckout}
-                    className="group relative w-full overflow-hidden border border-ink py-4 text-[11px] uppercase tracking-wide-lg focus:outline-none focus-visible:ring-1 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
+                    className="group relative w-full overflow-hidden border border-ink py-4 text-[11px] uppercase tracking-wide-lg focus:outline-none focus-visible:ring-1 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper min-h-[44px]"
                     data-cursor="hover"
                   >
                     <span className="absolute inset-0 translate-y-full bg-ink transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0" />
@@ -133,7 +134,7 @@ export default function CartDrawer() {
                       Proceed to Checkout
                     </span>
                   </button>
-                  <Link to="/order-status" onClick={close} className="mt-4 block text-center text-[11px] uppercase tracking-wide-lg text-muted link-line w-fit mx-auto">
+                  <Link to="/order-status" onClick={close} className="mt-4 block text-center text-[11px] uppercase tracking-wide-lg text-muted link-line w-fit mx-auto min-h-[44px] flex items-center justify-center">
                     Track Order
                   </Link>
                 </div>
