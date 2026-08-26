@@ -11,6 +11,7 @@ import Loader from './components/ui/Loader'
 import Checkout from './pages/Checkout'
 import OrderSuccess from './pages/OrderSuccess'
 import OrderStatus from './pages/OrderStatus'
+import Cart from './pages/Cart'
 import AdminLogin from './pages/admin/Login'
 import AdminDashboard from './pages/admin/Dashboard'
 import AdminProducts from './pages/admin/Products'
@@ -20,6 +21,7 @@ import AdminCollections from './pages/admin/Collections'
 import AdminDiagnostic from './pages/admin/Diagnostic'
 import AdminOrders from './pages/admin/Orders'
 import AdminOrderDetail from './pages/admin/OrderDetail'
+import AdminHero from './pages/admin/Hero'
 import AdminLayout from './components/admin/AdminLayout'
 import ProtectedRoute from './components/admin/ProtectedRoute'
 
@@ -124,6 +126,16 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/admin/hero"
+          element={
+            <ProtectedRoute>
+              <AdminLayout>
+                <AdminHero />
+              </AdminLayout>
+            </ProtectedRoute>
+          }
+        />
 
         {/* Storefront routes inside Root */}
         <Route
@@ -137,6 +149,7 @@ export default function App() {
                   <Route path="/shop/:category" element={<Shop />} />
                   <Route path="/product/:slug" element={<Product />} />
                   <Route path="/about" element={<About />} />
+                  <Route path="/cart" element={<Cart />} />
                   <Route path="/checkout" element={<Checkout />} />
                   <Route path="/order-success/:orderNumber" element={<OrderSuccess />} />
                   <Route path="/order-status" element={<OrderStatus />} />

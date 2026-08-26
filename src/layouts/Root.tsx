@@ -5,6 +5,7 @@ import AnnouncementBar from '../components/layout/AnnouncementBar'
 import Navbar from '../components/layout/Navbar'
 import MobileMenu from '../components/layout/MobileMenu'
 import CartDrawer from '../components/layout/CartDrawer'
+import SearchDrawer from '../components/layout/SearchDrawer'
 import Footer from '../components/layout/Footer'
 import { useLenis } from '../hooks/useLenis'
 import { ScrollTrigger } from '../lib/gsap'
@@ -28,6 +29,7 @@ export default function Root({ children }: { children: ReactNode }) {
         <Navbar />
         <MobileMenu />
         <CartDrawer />
+        <SearchDrawer />
         <main className="flex-1">{children}</main>
         <Footer />
       </div>

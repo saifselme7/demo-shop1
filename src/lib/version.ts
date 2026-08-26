@@ -1,5 +1,5 @@
 export const VERSION = {
-  commit: 'feat/production-completion — production-ready + orders + storage fix',
-  expected: 'main should include 001-006 migrations + admin + orders',
+  commit: 'feat/mobile-fixes-hero-cms — mobile fixes + hero CMS',
+  expected: '007_hero_cms.sql + hero-images bucket + search + cart page',
   date: new Date().toISOString(),
 }

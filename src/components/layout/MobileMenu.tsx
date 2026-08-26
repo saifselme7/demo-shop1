@@ -7,6 +7,7 @@ import { useUI } from '../../store/ui'
 export default function MobileMenu() {
   const open = useUI((s) => s.mobileMenuOpen)
   const setOpen = useUI((s) => s.setMobileMenu)
+  const setSearchOpen = useUI((s) => s.setSearchOpen)
 
   useEffect(() => {
     if (open) {
@@ -43,17 +44,29 @@ export default function MobileMenu() {
           exit={{ y: '-100%' }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         >
-          <div className="flex h-[68px] items-center justify-between px-6 border-b border-line">
-            <span className="font-display text-2xl font-bold tracking-ultra-tight">SAIF STORE</span>
-            <button
-              onClick={() => setOpen(false)}
-              className="text-[11px] uppercase tracking-wide-lg px-3 py-2 -mr-2 min-h-[44px] min-w-[44px] flex items-center justify-center focus:outline-none focus-visible:ring-1 focus-visible:ring-ink"
-              aria-label="Close menu"
-            >
-              Close
-            </button>
+          <div className="flex h-[68px] items-center justify-between px-6 border-b border-line shrink-0">
+            <span className="font-display text-xl font-bold tracking-ultra-tight">SAIF STORE</span>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => {
+                  setOpen(false)
+                  setTimeout(() => setSearchOpen(true), 300)
+                }}
+                className="text-[11px] uppercase tracking-wide-lg px-3 py-2 min-h-[44px] min-w-[44px] flex items-center justify-center border border-line hover:border-ink"
+                aria-label="Search"
+              >
+                Search
+              </button>
+              <button
+                onClick={() => setOpen(false)}
+                className="text-[11px] uppercase tracking-wide-lg px-3 py-2 -me-2 min-h-[44px] min-w-[44px] flex items-center justify-center focus:outline-none focus-visible:ring-1 focus-visible:ring-ink"
+                aria-label="Close menu"
+              >
+                Close
+              </button>
+            </div>
           </div>
-          <nav className="flex flex-1 flex-col justify-center gap-1 px-6 py-8">
+          <nav className="flex flex-1 flex-col justify-center gap-1 px-6 py-8 overflow-y-auto">
             {site.nav.map((n, i) => (
               <motion.div
                 key={n.href}
@@ -64,14 +77,14 @@ export default function MobileMenu() {
                 <Link
                   to={n.href}
                   onClick={() => setOpen(false)}
-                  className="block font-display text-[clamp(36px,10vw,48px)] tracking-ultra-tight text-ink py-1 focus:outline-none focus-visible:ring-1 focus-visible:ring-ink"
+                  className="block font-display text-[clamp(32px,9vw,48px)] tracking-ultra-tight text-ink py-2 min-h-[44px] flex items-center focus:outline-none focus-visible:ring-1 focus-visible:ring-ink"
                 >
                   {n.label}
                 </Link>
               </motion.div>
             ))}
           </nav>
-          <div className="border-t border-line px-6 py-6 flex flex-col gap-4">
+          <div className="border-t border-line px-6 py-6 flex flex-col gap-4 shrink-0">
             <div className="text-[12px] uppercase tracking-wide-lg text-muted">
               {site.city} — Est. {site.founded}
             </div>
