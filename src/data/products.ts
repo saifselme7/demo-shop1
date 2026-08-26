@@ -1,26 +1,16 @@
-export interface LocalizedString {
-  en: string
-  ar: string
-}
-
-export interface LocalizedArray {
-  en: string[]
-  ar: string[]
-}
-
 export interface Product {
   id: string
   slug: string
-  name: LocalizedString
-  subtitle: LocalizedString
+  name: string
+  subtitle: string
   price: number
   currency: string
   category: string
   collection: string
-  description: LocalizedString
-  details: LocalizedArray
+  description: string
+  details: string[]
   sizes: string[]
-  colors: { name: string; hex: string; label: LocalizedString }[]
+  colors: { name: string; hex: string }[]
   images: string[]
   featured?: boolean
   isNew?: boolean
@@ -35,34 +25,24 @@ export const products: Product[] = [
   {
     id: 'p01',
     slug: 'oversized-wool-coat',
-    name: { en: 'Oversized Wool Coat', ar: 'معطف صوف واسع' },
-    subtitle: { en: 'Brushed merino, mid-length', ar: 'صوف ميرينو ممشط، طول متوسط' },
+    name: 'Oversized Wool Coat',
+    subtitle: 'Brushed merino, mid-length',
     price: 685,
     currency: '€',
     category: 'outerwear',
     collection: 'aw-reserve',
-    description: {
-      en: 'A loose, architectural coat cut from brushed merino. Raglan sleeves, concealed placket, and a weighted hem that falls without resistance.',
-      ar: 'معطف بقصة واسعة معمولة من صوف ميرينو ممشط. أكمام رجلان، مردة مخفية، وذيل تقيل بينزل بانسيابية.',
-    },
-    details: {
-      en: [
-        '100% Italian merino wool',
-        'Concealed horn-button placket',
-        'Bemberg cupro lining',
-        'Made in Portugal',
-      ],
-      ar: [
-        '١٠٠٪ صوف ميرينو إيطالي',
-        'مردة بأزرار قرن مخفية',
-        'بطانة كوبرا بيمبرج',
-        'صناعة برتغالي',
-      ],
-    },
+    description:
+      'A loose, architectural coat cut from brushed merino. Raglan sleeves, concealed placket, and a weighted hem that falls without resistance.',
+    details: [
+      '100% Italian merino wool',
+      'Concealed horn-button placket',
+      'Bemberg cupro lining',
+      'Made in Portugal',
+    ],
     sizes: ['XS', 'S', 'M', 'L', 'XL'],
     colors: [
-      { name: 'Charcoal', hex: '#3A3A38', label: { en: 'Charcoal', ar: 'فحمي' } },
-      { name: 'Camel', hex: '#A88B66', label: { en: 'Camel', ar: 'جملي' } },
+      { name: 'Charcoal', hex: '#3A3A38' },
+      { name: 'Camel', hex: '#A88B66' },
     ],
     images: [
       img('1490481651871-ab68de25d43d', 1400),
@@ -74,34 +54,24 @@ export const products: Product[] = [
   {
     id: 'p02',
     slug: 'cashmere-mock-neck',
-    name: { en: 'Cashmere Mock Neck', ar: 'بلوفر كشمير برقبة عالية' },
-    subtitle: { en: '8-gauge, undyed fibre', ar: 'تريكو ٨ جيدج، ألياف طبيعية' },
+    name: 'Cashmere Mock Neck',
+    subtitle: '8-gauge, undyed fibre',
     price: 320,
     currency: '€',
     category: 'knitwear',
     collection: 'aw-reserve',
-    description: {
-      en: 'A relaxed mock-neck pullover knitted from undyed Mongolian cashmere. Boxy through the body, with a ribbed funnel collar.',
-      ar: 'بلوفر برقبة عالية معمول من كشمير منغولي طبيعي من غير صبغة. قصة واسعة ومريحة مع ياقة مضلعة.',
-    },
-    details: {
-      en: [
-        '100% grade-A Mongolian cashmere',
-        '8-gauge plain knit',
-        'Ribbed funnel collar and cuffs',
-        'Made in Scotland',
-      ],
-      ar: [
-        '١٠٠٪ كشمير منغولي درجة أولى',
-        'تريكو سادة ٨ جيدج',
-        'ياقة وأساور مضلعة',
-        'صناعة اسكتلندي',
-      ],
-    },
+    description:
+      'A relaxed mock-neck pullover knitted from undyed Mongolian cashmere. Boxy through the body, with a ribbed funnel collar.',
+    details: [
+      '100% grade-A Mongolian cashmere',
+      '8-gauge plain knit',
+      'Ribbed funnel collar and cuffs',
+      'Made in Scotland',
+    ],
     sizes: ['XS', 'S', 'M', 'L'],
     colors: [
-      { name: 'Oat', hex: '#D9CDB6', label: { en: 'Oat', ar: 'شوفان' } },
-      { name: 'Stone', hex: '#A39782', label: { en: 'Stone', ar: 'حجري' } },
+      { name: 'Oat', hex: '#D9CDB6' },
+      { name: 'Stone', hex: '#A39782' },
     ],
     images: [
       img('1608748010899-18f300247112', 1400),
@@ -113,34 +83,24 @@ export const products: Product[] = [
   {
     id: 'p03',
     slug: 'wide-pleated-trouser',
-    name: { en: 'Wide Pleated Trouser', ar: 'بنطلون واسع بكسرات' },
-    subtitle: { en: 'Tropical wool, double-pleat', ar: 'صوف استوائي، كسرتين' },
+    name: 'Wide Pleated Trouser',
+    subtitle: 'Tropical wool, double-pleat',
     price: 295,
     currency: '€',
     category: 'trousers',
     collection: 'aw-reserve',
-    description: {
-      en: 'High-rise, double-pleated trouser in pressed tropical wool. Full through the leg, gently tapered at the hem.',
-      ar: 'بنطلون بوسط عالي وكسرتين معمول من صوف استوائي مكوي. واسع من فوق ونازل بضيق خفيف عند الرجل.',
-    },
-    details: {
-      en: [
-        '96% virgin wool, 4% elastane',
-        'Double front pleats',
-        'Hook-and-eye closure',
-        'Made in Italy',
-      ],
-      ar: [
-        '٩٦٪ صوف بكر، ٤٪ إيلاستين',
-        'كسرتين قدام',
-        'قفلة خطاف',
-        'صناعة إيطالي',
-      ],
-    },
+    description:
+      'High-rise, double-pleated trouser in pressed tropical wool. Full through the leg, gently tapered at the hem.',
+    details: [
+      '96% virgin wool, 4% elastane',
+      'Double front pleats',
+      'Hook-and-eye closure',
+      'Made in Italy',
+    ],
     sizes: ['28', '30', '32', '34', '36'],
     colors: [
-      { name: 'Anthracite', hex: '#2F2F2D', label: { en: 'Anthracite', ar: 'أنثراسيت' } },
-      { name: 'Sand', hex: '#C7B79A', label: { en: 'Sand', ar: 'رملي' } },
+      { name: 'Anthracite', hex: '#2F2F2D' },
+      { name: 'Sand', hex: '#C7B79A' },
     ],
     images: [
       img('1594633312687-16307288dd64', 1400),
@@ -151,34 +111,24 @@ export const products: Product[] = [
   {
     id: 'p04',
     slug: 'bias-cut-silk-slip',
-    name: { en: 'Bias-Cut Silk Slip', ar: 'فستان حرير بقصة مايلة' },
-    subtitle: { en: 'Sandwashed silk, floor-length', ar: 'حرير مغسول، طويل لحد الأرض' },
+    name: 'Bias-Cut Silk Slip',
+    subtitle: 'Sandwashed silk, floor-length',
     price: 380,
     currency: '€',
     category: 'dresses',
     collection: 'aw-reserve',
-    description: {
-      en: 'A floor-length bias-cut slip in sandwashed silk. Cowl neckline, thin adjustable straps, and a fluid, weighted fall.',
-      ar: 'فستان حرير طويل بقصة مايلة معمول من حرير مغسول. ياقة منسدلة وحمالات رفيعة بتتظبط ونزلة انسيابية وتقيلة.',
-    },
-    details: {
-      en: [
-        '100% sandwashed silk',
-        'Bias cut',
-        'Adjustable straps',
-        'Made in France',
-      ],
-      ar: [
-        '١٠٠٪ حرير مغسول',
-        'قصة مايلة',
-        'حمالات بتتظبط',
-        'صناعة فرنساوي',
-      ],
-    },
+    description:
+      'A floor-length bias-cut slip in sandwashed silk. Cowl neckline, thin adjustable straps, and a fluid, weighted fall.',
+    details: [
+      '100% sandwashed silk',
+      'Bias cut',
+      'Adjustable straps',
+      'Made in France',
+    ],
     sizes: ['XS', 'S', 'M', 'L'],
     colors: [
-      { name: 'Bone', hex: '#E5DCC7', label: { en: 'Bone', ar: 'عظمي' } },
-      { name: 'Ink', hex: '#1B1B1B', label: { en: 'Ink', ar: 'حبر' } },
+      { name: 'Bone', hex: '#E5DCC7' },
+      { name: 'Ink', hex: '#1B1B1B' },
     ],
     images: [
       img('1518570305330-b4e045569e53', 1400),
@@ -189,34 +139,24 @@ export const products: Product[] = [
   {
     id: 'p05',
     slug: 'structured-linen-blazer',
-    name: { en: 'Structured Linen Blazer', ar: 'بليزر كتان بقصة مظبوطة' },
-    subtitle: { en: 'Irish linen, half-canvas', ar: 'كتان إيرلندي، نص مبطن' },
+    name: 'Structured Linen Blazer',
+    subtitle: 'Irish linen, half-canvas',
     price: 410,
     currency: '€',
     category: 'outerwear',
     collection: 'spring-reserve',
-    description: {
-      en: 'A half-canvas single-breasted blazer in dry-finish Irish linen. Soft shoulder, notch lapel, and patch pockets.',
-      ar: 'بليزر بزرار واحد معمول من كتان إيرلندي ناشف. كتف ناعم وياقة مقصوصة وجيوب خارجية.',
-    },
-    details: {
-      en: [
-        '100% Irish linen',
-        'Half-canvas construction',
-        'Patch pockets',
-        'Made in Portugal',
-      ],
-      ar: [
-        '١٠٠٪ كتان إيرلندي',
-        'نص مبطن',
-        'جيوب خارجية',
-        'صناعة برتغالي',
-      ],
-    },
+    description:
+      'A half-canvas single-breasted blazer in dry-finish Irish linen. Soft shoulder, notch lapel, and patch pockets.',
+    details: [
+      '100% Irish linen',
+      'Half-canvas construction',
+      'Patch pockets',
+      'Made in Portugal',
+    ],
     sizes: ['XS', 'S', 'M', 'L', 'XL'],
     colors: [
-      { name: 'Ecru', hex: '#E8E0D3', label: { en: 'Ecru', ar: 'أوف وايت' } },
-      { name: 'Coal', hex: '#232323', label: { en: 'Coal', ar: 'فحم' } },
+      { name: 'Ecru', hex: '#E8E0D3' },
+      { name: 'Coal', hex: '#232323' },
     ],
     images: [
       img('1485231183945-8c42f0d6e7a1', 1400),
@@ -227,34 +167,24 @@ export const products: Product[] = [
   {
     id: 'p06',
     slug: 'merino-roll-neck',
-    name: { en: 'Merino Roll Neck', ar: 'بلوفر ميرينو برقبة عالية' },
-    subtitle: { en: 'Extra-fine, second-skin', ar: 'ميرينو ناعم جدًا، زي تاني جلد' },
+    name: 'Merino Roll Neck',
+    subtitle: 'Extra-fine, second-skin',
     price: 180,
     currency: '€',
     category: 'knitwear',
     collection: 'spring-reserve',
-    description: {
-      en: 'A long-sleeve roll neck in extra-fine 18.5-micron merino. Slim through the body, layered or alone.',
-      ar: 'بلوفر بكم طويل ورقبة عالية من ميرينو ١٨.٥ ميكرون ناعم جدًا. مظبوط على الجسم، يتلبس لوحده أو تحت حاجة.',
-    },
-    details: {
-      en: [
-        '100% extra-fine merino',
-        '18.5 micron',
-        'Fully fashioned',
-        'Made in Italy',
-      ],
-      ar: [
-        '١٠٠٪ ميرينو ناعم جدًا',
-        '١٨.٥ ميكرون',
-        'تفصيل كامل',
-        'صناعة إيطالي',
-      ],
-    },
+    description:
+      'A long-sleeve roll neck in extra-fine 18.5-micron merino. Slim through the body, layered or alone.',
+    details: [
+      '100% extra-fine merino',
+      '18.5 micron',
+      'Fully fashioned',
+      'Made in Italy',
+    ],
     sizes: ['XS', 'S', 'M', 'L'],
     colors: [
-      { name: 'Ivory', hex: '#EDE5D3', label: { en: 'Ivory', ar: 'عاجي' } },
-      { name: 'Slate', hex: '#444444', label: { en: 'Slate', ar: 'رمادي غامق' } },
+      { name: 'Ivory', hex: '#EDE5D3' },
+      { name: 'Slate', hex: '#444444' },
     ],
     images: [
       img('1434389677669-e08b4cac3105', 1400),
@@ -265,34 +195,24 @@ export const products: Product[] = [
   {
     id: 'p07',
     slug: 'cotton-twill-chino',
-    name: { en: 'Cotton Twill Chino', ar: 'بنطلون شينو قطن' },
-    subtitle: { en: 'Garment-dyed, straight-leg', ar: 'مصبوغ بعد التفصيل، قصة مستقيمة' },
+    name: 'Cotton Twill Chino',
+    subtitle: 'Garment-dyed, straight-leg',
     price: 220,
     currency: '€',
     category: 'trousers',
     collection: 'spring-reserve',
-    description: {
-      en: 'A straight-leg chino in 8-oz garment-dyed cotton twill. Mid-rise, slanted front pockets, clean unbroken hem.',
-      ar: 'بنطلون شينو بقصة مستقيمة من قطن تِويل ٨ أونصة مصبوغ بعد التفصيل. وسط متوسط وجيوب مايلة وذيل نضيف.',
-    },
-    details: {
-      en: [
-        '8-oz cotton twill',
-        'Garment-dyed',
-        'Slanted front pockets',
-        'Made in Portugal',
-      ],
-      ar: [
-        'قطن تِويل ٨ أونصة',
-        'مصبوغ بعد التفصيل',
-        'جيوب مايلة قدام',
-        'صناعة برتغالي',
-      ],
-    },
+    description:
+      'A straight-leg chino in 8-oz garment-dyed cotton twill. Mid-rise, slanted front pockets, clean unbroken hem.',
+    details: [
+      '8-oz cotton twill',
+      'Garment-dyed',
+      'Slanted front pockets',
+      'Made in Portugal',
+    ],
     sizes: ['28', '30', '32', '34', '36'],
     colors: [
-      { name: 'Faded Olive', hex: '#6A6F4D', label: { en: 'Faded Olive', ar: 'زيتوني باهت' } },
-      { name: 'Washed Black', hex: '#2C2C2C', label: { en: 'Washed Black', ar: 'أسود مغسول' } },
+      { name: 'Faded Olive', hex: '#6A6F4D' },
+      { name: 'Washed Black', hex: '#2C2C2C' },
     ],
     images: [
       img('1594631252845-29fc4cc8cde9', 1400),
@@ -303,34 +223,24 @@ export const products: Product[] = [
   {
     id: 'p08',
     slug: 'wrap-wool-dress',
-    name: { en: 'Wrap Wool Dress', ar: 'فستان صوف ملفوف' },
-    subtitle: { en: 'Crispa crepe, ankle-length', ar: 'كريب كريسبا، طول للكاحل' },
+    name: 'Wrap Wool Dress',
+    subtitle: 'Crispa crepe, ankle-length',
     price: 440,
     currency: '€',
     category: 'dresses',
     collection: 'spring-reserve',
-    description: {
-      en: 'An ankle-length wrap dress in matte Crispa crepe. Soft collar, self-tie waist, and a deep inverted pleat.',
-      ar: 'فستان ملفوف طوله للكاحل من كريب كريسبا مطفي. ياقة ناعمة ورباط على الوسط وكسرة عميقة.',
-    },
-    details: {
-      en: [
-        'Crispa crepe, 96% wool',
-        'Self-tie waist',
-        'Inverted centre pleat',
-        'Made in Italy',
-      ],
-      ar: [
-        'كريب كريسبا، ٩٦٪ صوف',
-        'رباط على الوسط',
-        'كسرة مقلوبة في النص',
-        'صناعة إيطالي',
-      ],
-    },
+    description:
+      'An ankle-length wrap dress in matte Crispa crepe. Soft collar, self-tie waist, and a deep inverted pleat.',
+    details: [
+      'Crispa crepe, 96% wool',
+      'Self-tie waist',
+      'Inverted centre pleat',
+      'Made in Italy',
+    ],
     sizes: ['XS', 'S', 'M', 'L'],
     colors: [
-      { name: 'Clay', hex: '#A4715A', label: { en: 'Clay', ar: 'طيني' } },
-      { name: 'Black', hex: '#0E0E0E', label: { en: 'Black', ar: 'أسود' } },
+      { name: 'Clay', hex: '#A4715A' },
+      { name: 'Black', hex: '#0E0E0E' },
     ],
     images: [
       img('1485968579580-b6d095142e6f', 1400),
@@ -341,34 +251,24 @@ export const products: Product[] = [
   {
     id: 'p09',
     slug: 'leather-shoulder-bag',
-    name: { en: 'Leather Shoulder Bag', ar: 'شنطة كتف جلد' },
-    subtitle: { en: 'Vegetable-tanned, structured', ar: 'جلد مدبوغ نباتي، بقصة مظبوطة' },
+    name: 'Leather Shoulder Bag',
+    subtitle: 'Vegetable-tanned, structured',
     price: 510,
     currency: '€',
     category: 'accessories',
     collection: 'aw-reserve',
-    description: {
-      en: 'A structured shoulder bag in vegetable-tanned bovine leather. Magnetic flap, single interior pocket, brass hardware.',
-      ar: 'شنطة كتف بقصة مظبوطة من جلد بقري مدبوغ نباتي. قفل مغناطيسي وجيب داخلي واحد وإكسسوارات نحاس.',
-    },
-    details: {
-      en: [
-        'Vegetable-tanned bovine leather',
-        'Brass hardware',
-        'Suede lining',
-        'Made in Italy',
-      ],
-      ar: [
-        'جلد بقري مدبوغ نباتي',
-        'إكسسوارات نحاس',
-        'بطانة شمواه',
-        'صناعة إيطالي',
-      ],
-    },
+    description:
+      'A structured shoulder bag in vegetable-tanned bovine leather. Magnetic flap, single interior pocket, brass hardware.',
+    details: [
+      'Vegetable-tanned bovine leather',
+      'Brass hardware',
+      'Suede lining',
+      'Made in Italy',
+    ],
     sizes: ['One size'],
     colors: [
-      { name: 'Tan', hex: '#9B6E3F', label: { en: 'Tan', ar: 'هافان' } },
-      { name: 'Black', hex: '#0E0E0E', label: { en: 'Black', ar: 'أسود' } },
+      { name: 'Tan', hex: '#9B6E3F' },
+      { name: 'Black', hex: '#0E0E0E' },
     ],
     images: [
       img('1547949003-97960816d757', 1400),
@@ -380,34 +280,24 @@ export const products: Product[] = [
   {
     id: 'p10',
     slug: 'cashmere-scarf',
-    name: { en: 'Cashmere Scarf', ar: 'سكارف كشمير' },
-    subtitle: { en: 'Fringed, double-ply', ar: 'بشراشيب، طبقتين' },
+    name: 'Cashmere Scarf',
+    subtitle: 'Fringed, double-ply',
     price: 165,
     currency: '€',
     category: 'accessories',
     collection: 'aw-reserve',
-    description: {
-      en: 'A double-ply cashmere scarf with hand-knotted fringe. Generous proportions, woven on traditional looms.',
-      ar: 'سكارف كشمير طبقتين بشراشيب معمولة بالإيد. مقاس كبير ومنسوج على نول تقليدي.',
-    },
-    details: {
-      en: [
-        '100% cashmere',
-        'Double-ply',
-        'Hand-knotted fringe',
-        'Made in Scotland',
-      ],
-      ar: [
-        '١٠٠٪ كشمير',
-        'طبقتين',
-        'شراشيب معمولة بالإيد',
-        'صناعة اسكتلندي',
-      ],
-    },
+    description:
+      'A double-ply cashmere scarf with hand-knotted fringe. Generous proportions, woven on traditional looms.',
+    details: [
+      '100% cashmere',
+      'Double-ply',
+      'Hand-knotted fringe',
+      'Made in Scotland',
+    ],
     sizes: ['One size'],
     colors: [
-      { name: 'Oat', hex: '#D9CDB6', label: { en: 'Oat', ar: 'شوفان' } },
-      { name: 'Graphite', hex: '#3A3A3A', label: { en: 'Graphite', ar: 'جرافيتي' } },
+      { name: 'Oat', hex: '#D9CDB6' },
+      { name: 'Graphite', hex: '#3A3A3A' },
     ],
     images: [
       img('1523779105320-d1cd346ff52b', 1400),
@@ -418,34 +308,24 @@ export const products: Product[] = [
   {
     id: 'p11',
     slug: 'cotton-poplin-shirt',
-    name: { en: 'Cotton Poplin Shirt', ar: 'قميص قطن بوبلين' },
-    subtitle: { en: 'Tight weave, relaxed fit', ar: 'نسيج محكم، قصة واسعة' },
+    name: 'Cotton Poplin Shirt',
+    subtitle: 'Tight weave, relaxed fit',
     price: 195,
     currency: '€',
     category: 'outerwear',
     collection: 'spring-reserve',
-    description: {
-      en: 'A relaxed-fit shirt in dense cotton poplin. Soft camp collar, mother-of-pearl buttons, curved hem.',
-      ar: 'قميص بقصة واسعة من قطن بوبلين محكم. ياقة كامب ناعمة وأزرار صدف وذيل مقوس.',
-    },
-    details: {
-      en: [
-        '100% cotton poplin',
-        'Mother-of-pearl buttons',
-        'Camp collar',
-        'Made in Portugal',
-      ],
-      ar: [
-        '١٠٠٪ قطن بوبلين',
-        'أزرار صدف',
-        'ياقة كامب',
-        'صناعة برتغالي',
-      ],
-    },
+    description:
+      'A relaxed-fit shirt in dense cotton poplin. Soft camp collar, mother-of-pearl buttons, curved hem.',
+    details: [
+      '100% cotton poplin',
+      'Mother-of-pearl buttons',
+      'Camp collar',
+      'Made in Portugal',
+    ],
     sizes: ['XS', 'S', 'M', 'L', 'XL'],
     colors: [
-      { name: 'Optic White', hex: '#F4F1EA', label: { en: 'Optic White', ar: 'أبيض ناصع' } },
-      { name: 'Sky', hex: '#9FB3C8', label: { en: 'Sky', ar: 'سماوي' } },
+      { name: 'Optic White', hex: '#F4F1EA' },
+      { name: 'Sky', hex: '#9FB3C8' },
     ],
     images: [
       img('1483985988355-763728e1935b', 1400),
@@ -456,34 +336,24 @@ export const products: Product[] = [
   {
     id: 'p12',
     slug: 'ribbed-cotton-sock',
-    name: { en: 'Ribbed Cotton Sock', ar: 'شراب قطن مضلع' },
-    subtitle: { en: 'Long-staple, ribbed', ar: 'قطن طويل التيلة، مضلع' },
+    name: 'Ribbed Cotton Sock',
+    subtitle: 'Long-staple, ribbed',
     price: 35,
     currency: '€',
     category: 'accessories',
     collection: 'spring-reserve',
-    description: {
-      en: 'A mid-calf ribbed sock in long-staple Egyptian cotton. Reinforced heel and toe, seamless toe closure.',
-      ar: 'شراب مضلع لنص الساق من قطن مصري طويل التيلة. كعب ومقدمة مقويين وقفلة من غير خياطة.',
-    },
-    details: {
-      en: [
-        '88% Egyptian cotton',
-        '10% polyamide, 2% elastane',
-        'Seamless toe',
-        'Made in Italy',
-      ],
-      ar: [
-        '٨٨٪ قطن مصري',
-        '١٠٪ بولي أميد، ٢٪ إيلاستين',
-        'قفلة من غير خياطة',
-        'صناعة إيطالي',
-      ],
-    },
+    description:
+      'A mid-calf ribbed sock in long-staple Egyptian cotton. Reinforced heel and toe, seamless toe closure.',
+    details: [
+      '88% Egyptian cotton',
+      '10% polyamide, 2% elastane',
+      'Seamless toe',
+      'Made in Italy',
+    ],
     sizes: ['S', 'M', 'L'],
     colors: [
-      { name: 'Bone', hex: '#E5DCC7', label: { en: 'Bone', ar: 'عظمي' } },
-      { name: 'Soot', hex: '#2A2A2A', label: { en: 'Soot', ar: 'هباب' } },
+      { name: 'Bone', hex: '#E5DCC7' },
+      { name: 'Soot', hex: '#2A2A2A' },
     ],
     images: [
       img('1469334031218-e382a71b716b', 1400),
@@ -509,15 +379,4 @@ export function getRelated(slug: string, limit = 4) {
   const p = getProduct(slug)
   if (!p) return featured.slice(0, limit)
   return products.filter((x) => x.slug !== slug && x.category === p.category).slice(0, limit)
-}
-
-export function getLocalizedProduct(product: Product, lang: 'en' | 'ar') {
-  return {
-    ...product,
-    localizedName: product.name[lang],
-    localizedSubtitle: product.subtitle[lang],
-    localizedDescription: product.description[lang],
-    localizedDetails: product.details[lang],
-    localizedColors: product.colors.map((c) => ({ ...c, localizedLabel: c.label[lang] })),
-  }
 }

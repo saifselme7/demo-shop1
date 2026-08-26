@@ -5,8 +5,6 @@ import { site } from '../../data/site'
 import { useCart, cartCount } from '../../store/cart'
 import { useUI } from '../../store/ui'
 import { cn } from '../../lib/utils'
-import { useLanguage } from '../../i18n'
-import LanguageSwitcher from '../ui/LanguageSwitcher'
 
 export default function Navbar() {
   const location = useLocation()
@@ -15,7 +13,6 @@ export default function Navbar() {
   const setMobileMenu = useUI((s) => s.setMobileMenu)
   const [scrolled, setScrolled] = useState(false)
   const navRef = useRef<HTMLElement>(null)
-  const { t } = useLanguage()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50)
@@ -38,16 +35,6 @@ export default function Navbar() {
     return () => ctx.revert()
   }, [])
 
-  const navItems = [
-    { label: t.nav.new, href: '/shop/new' },
-    { label: t.nav.outerwear, href: '/shop/outerwear' },
-    { label: t.nav.knitwear, href: '/shop/knitwear' },
-    { label: t.nav.trousers, href: '/shop/trousers' },
-    { label: t.nav.dresses, href: '/shop/dresses' },
-    { label: t.nav.accessories, href: '/shop/accessories' },
-    { label: t.nav.about, href: '/about' },
-  ]
-
   return (
     <header
       ref={navRef}
@@ -60,7 +47,7 @@ export default function Navbar() {
     >
       <div className="container-ecru-wide flex h-[68px] items-center justify-between">
         <nav className="hidden lg:flex items-center gap-7">
-          {navItems.slice(0, 4).map((n) => (
+          {site.nav.slice(0, 4).map((n) => (
             <Link
               key={n.href}
               to={n.href}
@@ -77,15 +64,15 @@ export default function Navbar() {
 
         <Link
           to="/"
-          className="nav-item absolute left-1/2 -translate-x-1/2 font-display text-xl md:text-2xl font-bold tracking-ultra-tight text-ink focus:outline-none focus-visible:ring-1 focus-visible:ring-ink whitespace-nowrap"
+          className="nav-item absolute left-1/2 -translate-x-1/2 font-display text-2xl font-bold tracking-ultra-tight text-ink focus:outline-none focus-visible:ring-1 focus-visible:ring-ink"
           data-cursor="hover"
         >
           SAIF STORE
         </Link>
 
-        <div className="flex items-center gap-3 md:gap-5">
+        <div className="flex items-center gap-5">
           <nav className="hidden lg:flex items-center gap-7">
-            {navItems.slice(4).map((n) => (
+            {site.nav.slice(4).map((n) => (
               <Link
                 key={n.href}
                 to={n.href}
@@ -99,14 +86,13 @@ export default function Navbar() {
               </Link>
             ))}
           </nav>
-          <LanguageSwitcher className="nav-item hidden md:flex" />
           <button
             className="nav-item text-[12px] uppercase tracking-wide-lg text-ink link-line hidden md:inline-block focus:outline-none focus-visible:ring-1 focus-visible:ring-ink"
             data-cursor="hover"
             title="Search — coming soon"
-            aria-label={t.nav.search}
+            aria-label="Search"
           >
-            {t.nav.search}
+            Search
           </button>
           <button
             onClick={open}
@@ -114,14 +100,14 @@ export default function Navbar() {
             data-cursor="hover"
             aria-label="Open cart"
           >
-            {t.nav.cart}
-            <span className="ms-1.5 inline-flex items-center justify-center text-[10px] tabular-nums">
+            Cart
+            <span className="ml-1.5 inline-flex items-center justify-center text-[10px] tabular-nums">
               ({cartCount(items)})
             </span>
           </button>
           <button
             onClick={() => setMobileMenu(true)}
-            className="lg:hidden flex flex-col gap-[6px] p-3 -me-2 focus:outline-none focus-visible:ring-1 focus-visible:ring-ink"
+            className="lg:hidden flex flex-col gap-[6px] p-3 -mr-2 focus:outline-none focus-visible:ring-1 focus-visible:ring-ink"
             data-cursor="hover"
             aria-label="Open menu"
           >

@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { gsap } from '../../lib/gsap'
-import { useLanguage } from '../../i18n'
 
 interface Props {
   onComplete?: () => void
@@ -10,7 +9,6 @@ interface Props {
 export default function Loader({ onComplete }: Props) {
   const [count, setCount] = useState(0)
   const ref = useRef<HTMLDivElement>(null)
-  const { t } = useLanguage()
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -49,7 +47,7 @@ export default function Loader({ onComplete }: Props) {
       exit={{ opacity: 0, transition: { duration: 0.2 } }}
     >
       <div className="loader-content flex flex-col items-center">
-        <span className="eyebrow text-paper/60 mb-4">{t.loader.established}</span>
+        <span className="eyebrow text-paper/60 mb-4">SAIF STORE — Established 2019</span>
         <div className="font-display text-[18vw] md:text-[16vw] leading-none tracking-ultra-tight">
           {String(count).padStart(3, '0')}
         </div>

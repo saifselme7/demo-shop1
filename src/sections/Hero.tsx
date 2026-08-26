@@ -2,11 +2,9 @@ import { useEffect, useRef } from 'react'
 import { gsap, ScrollTrigger } from '../lib/gsap'
 import MagneticButton from '../components/ui/MagneticButton'
 import { site } from '../data/site'
-import { useLanguage } from '../i18n'
 
 export default function Hero() {
   const root = useRef<HTMLDivElement>(null)
-  const { t } = useLanguage()
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -56,37 +54,38 @@ export default function Hero() {
 
       <div className="hero-content relative z-10 flex h-full flex-col justify-between px-6 py-10 md:px-10 md:py-12 lg:px-16 lg:py-16">
         <div className="flex items-start justify-between">
-          <span className="hero-eyebrow eyebrow text-paper/80">{t.hero.eyebrow}</span>
+          <span className="hero-eyebrow eyebrow text-paper/80">SAIF STORE — AW / Reserve ’25</span>
           <span className="hero-eyebrow hidden text-paper/80 md:block">{site.city}</span>
         </div>
 
         <div className="max-w-[1400px]">
           <h1 className="font-display text-[clamp(48px,14vw,160px)] md:text-[12vw] lg:text-[11vw] xl:text-[10vw] leading-[0.85] tracking-ultra-tight text-paper">
-            <span className="block overflow-hidden"><span className="hero-line inline-block">{t.hero.line1}</span></span>
-            <span className="block overflow-hidden"><span className="hero-line inline-block">{t.hero.line2}</span></span>
-            <span className="block overflow-hidden"><span className="hero-line inline-block font-serif italic font-normal">{t.hero.line3}</span></span>
+            <span className="block overflow-hidden"><span className="hero-line inline-block">Garments for</span></span>
+            <span className="block overflow-hidden"><span className="hero-line inline-block">the considered</span></span>
+            <span className="block overflow-hidden"><span className="hero-line inline-block font-serif italic font-normal">life.</span></span>
           </h1>
         </div>
 
         <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <div className="hero-meta max-w-md">
             <p className="text-paper/90 text-[15px] leading-relaxed">
-              {t.hero.description}
+              A studied wardrobe of essential pieces — patterns refined across seasons,
+              made in numbered editions, intended to endure.
             </p>
           </div>
           <div className="hero-cta flex flex-col w-full gap-3 sm:w-auto sm:flex-row sm:flex-wrap">
             <MagneticButton to="/shop" variant="solid" className="w-full sm:w-auto justify-center text-paper">
-              {t.hero.browseCollection}
+              Browse the collection
             </MagneticButton>
             <MagneticButton to="/about" variant="outline" className="w-full sm:w-auto justify-center border-paper text-paper">
-              {t.hero.atelier}
+              The atelier
             </MagneticButton>
           </div>
         </div>
       </div>
 
       <div className="absolute bottom-6 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-2 text-paper/70 md:flex">
-        <span className="text-[10px] uppercase tracking-wide-lg">{t.hero.scroll}</span>
+        <span className="text-[10px] uppercase tracking-wide-lg">Scroll</span>
         <span className="h-12 w-px bg-paper/40" />
       </div>
     </section>

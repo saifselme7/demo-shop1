@@ -1,53 +1,47 @@
 import { useMemo, useState, useEffect } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import ProductCard from '../components/product/ProductCard'
-import { products } from '../data/products'
 import { cn } from '../lib/utils'
-import { useLanguage } from '../i18n'
+import { useProductsByCategory } from '../hooks/useProducts'
+import { useProductsByCollection } from '../hooks/useProducts'
 
 const categories = ['all', 'new', 'outerwear', 'knitwear', 'trousers', 'dresses', 'accessories'] as const
 
+const sorts = [
+  { label: 'Latest', value: 'latest' },
+  { label: 'Price — Low', value: 'price-asc' },
+  { label: 'Price — High', value: 'price-desc' },
+] as const
+
 export default function Shop() {
   const { category } = useParams()
+  const [searchParams] = useSearchParams()
+  const collectionParam = searchParams.get('collection')
+
   const [active, setActive] = useState<string>(category && category !== 'all' ? category : 'all')
-  const [sort, setSort] = useState('latest')
-  const { t, language } = useLanguage()
+  const [sort, setSort] = useState<(typeof sorts)[number]['value']>('latest')
+
+  const { products: categoryProducts, loading: categoryLoading, error: categoryError } = useProductsByCategory(active)
+  const { products: collectionProducts, loading: collectionLoading, error: collectionError } = useProductsByCollection(collectionParam || '')
 
   useEffect(() => {
     if (category && category !== 'all') setActive(category)
     else setActive('all')
   }, [category])
 
-  const filtered = useMemo(() => {
-    let list = active === 'all' ? products : products.filter((p) => p.category === active)
-    if (active === 'new') list = products.filter((p) => p.isNew)
+  const { filtered, loading, error } = useMemo(() => {
+    let list = collectionParam ? collectionProducts : categoryProducts
+    let isLoading = collectionParam ? collectionLoading : categoryLoading
+    let err = collectionParam ? collectionError : categoryError
+
     if (sort === 'price-asc') list = [...list].sort((a, b) => a.price - b.price)
     if (sort === 'price-desc') list = [...list].sort((a, b) => b.price - a.price)
-    return list
-  }, [active, sort])
 
-  const getCategoryLabel = (c: string) => {
-    switch (c) {
-      case 'all': return t.shop.categories.all
-      case 'new': return t.shop.categories.new
-      case 'outerwear': return t.shop.categories.outerwear
-      case 'knitwear': return t.shop.categories.knitwear
-      case 'trousers': return t.shop.categories.trousers
-      case 'dresses': return t.shop.categories.dresses
-      case 'accessories': return t.shop.categories.accessories
-      default: return c
-    }
-  }
+    return { filtered: list, loading: isLoading, error: err }
+  }, [categoryProducts, collectionProducts, categoryLoading, collectionLoading, categoryError, collectionError, collectionParam, sort])
 
-  const getSortLabel = (v: string) => {
-    switch (v) {
-      case 'latest': return t.shop.sort.latest
-      case 'price-asc': return t.shop.sort.priceLow
-      case 'price-desc': return t.shop.sort.priceHigh
-      default: return v
-    }
-  }
+  const displayTitle = collectionParam ? collectionParam.replace('-', ' ') : active === 'all' ? 'All Pieces' : active
 
   return (
     <motion.div
@@ -58,10 +52,13 @@ export default function Shop() {
       className="container-ecru-wide py-12 md:py-20 lg:py-24"
     >
       <div className="mb-10 md:mb-14">
-        <span className="eyebrow mb-3 block">{t.shop.eyebrow}</span>
+        <span className="eyebrow mb-3 block">— Collection</span>
         <h1 className="font-display text-[clamp(36px,10vw,96px)] md:text-7xl lg:text-8xl xl:text-9xl tracking-ultra-tight leading-[0.9] capitalize break-words">
-          {active === 'all' ? t.shop.allPieces : getCategoryLabel(active)}
+          {displayTitle}
         </h1>
+        {collectionParam && (
+          <p className="mt-3 text-[13px] text-muted">Filtered by collection: {collectionParam}</p>
+        )}
       </div>
 
       <div className="mb-10 md:mb-12 flex flex-col gap-5 border-y border-line py-4 md:py-5 md:flex-row md:items-center md:justify-between">
@@ -76,39 +73,51 @@ export default function Shop() {
               )}
               data-cursor="hover"
             >
-              {getCategoryLabel(c)}
+              {c === 'all' ? 'All' : c}
             </button>
           ))}
         </nav>
         <div className="flex flex-wrap items-center gap-3 md:gap-4">
           <span className="text-[11px] md:text-[12px] uppercase tracking-wide-lg text-muted">
-            {filtered.length} {filtered.length === 1 ? t.shop.piece : t.shop.pieces}
+            {loading ? '...' : `${filtered.length} ${filtered.length === 1 ? 'piece' : 'pieces'}`}
           </span>
           <span className="hidden md:inline text-line">|</span>
           <div className="flex flex-wrap gap-3 md:gap-4">
-            {(['latest', 'price-asc', 'price-desc'] as const).map((s) => (
+            {sorts.map((s) => (
               <button
-                key={s}
-                onClick={() => setSort(s)}
+                key={s.value}
+                onClick={() => setSort(s.value)}
                 className={cn(
                   'text-[11px] md:text-[12px] uppercase tracking-wide-lg link-line focus:outline-none focus-visible:ring-1 focus-visible:ring-ink',
-                  sort === s ? 'text-ochre' : 'text-muted hover:text-ink',
+                  sort === s.value ? 'text-ochre' : 'text-muted hover:text-ink',
                 )}
                 data-cursor="hover"
               >
-                {getSortLabel(s)}
+                {s.label}
               </button>
             ))}
           </div>
         </div>
       </div>
 
-      {filtered.length === 0 ? (
+      {loading ? (
+        <div className="grid grid-cols-2 gap-x-4 gap-y-10 md:gap-x-6 md:gap-y-14 lg:grid-cols-3 xl:grid-cols-4">
+          {[...Array(8)].map((_, i) => (
+            <div key={i} className="aspect-[3/4] bg-cream animate-pulse" />
+          ))}
+        </div>
+      ) : error ? (
         <div className="py-24 md:py-32 text-center">
-          <span className="eyebrow mb-4 block">{t.shop.emptySub}</span>
-          <p className="font-serif italic text-2xl text-muted">{t.shop.empty}</p>
+          <span className="eyebrow mb-4 block">— Error</span>
+          <p className="font-serif italic text-2xl text-muted">Unable to load collection.</p>
+          <p className="mt-2 text-[11px] uppercase tracking-wide-lg text-muted">{error}</p>
+        </div>
+      ) : filtered.length === 0 ? (
+        <div className="py-24 md:py-32 text-center">
+          <span className="eyebrow mb-4 block">— Empty</span>
+          <p className="font-serif italic text-2xl text-muted">No pieces in this category yet.</p>
           <Link to="/shop" className="mt-8 inline-block btn-underline text-[11px] uppercase tracking-wide-lg" data-cursor="hover">
-            {t.shop.viewAll}
+            View all pieces
           </Link>
         </div>
       ) : (
