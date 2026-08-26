@@ -4,18 +4,15 @@ import { motion } from 'framer-motion'
 import ProductCard from '../components/product/ProductCard'
 import { products } from '../data/products'
 import { cn } from '../lib/utils'
+import { useLanguage } from '../i18n'
 
-const categories = ['all', 'new', 'outerwear', 'knitwear', 'trousers', 'dresses', 'accessories']
-const sorts = [
-  { label: 'Latest', value: 'latest' },
-  { label: 'Price — Low', value: 'price-asc' },
-  { label: 'Price — High', value: 'price-desc' },
-]
+const categories = ['all', 'new', 'outerwear', 'knitwear', 'trousers', 'dresses', 'accessories'] as const
 
 export default function Shop() {
   const { category } = useParams()
   const [active, setActive] = useState<string>(category && category !== 'all' ? category : 'all')
   const [sort, setSort] = useState('latest')
+  const { t, language } = useLanguage()
 
   useEffect(() => {
     if (category && category !== 'all') setActive(category)
@@ -30,6 +27,28 @@ export default function Shop() {
     return list
   }, [active, sort])
 
+  const getCategoryLabel = (c: string) => {
+    switch (c) {
+      case 'all': return t.shop.categories.all
+      case 'new': return t.shop.categories.new
+      case 'outerwear': return t.shop.categories.outerwear
+      case 'knitwear': return t.shop.categories.knitwear
+      case 'trousers': return t.shop.categories.trousers
+      case 'dresses': return t.shop.categories.dresses
+      case 'accessories': return t.shop.categories.accessories
+      default: return c
+    }
+  }
+
+  const getSortLabel = (v: string) => {
+    switch (v) {
+      case 'latest': return t.shop.sort.latest
+      case 'price-asc': return t.shop.sort.priceLow
+      case 'price-desc': return t.shop.sort.priceHigh
+      default: return v
+    }
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -39,9 +58,9 @@ export default function Shop() {
       className="container-ecru-wide py-12 md:py-20 lg:py-24"
     >
       <div className="mb-10 md:mb-14">
-        <span className="eyebrow mb-3 block">— Collection</span>
+        <span className="eyebrow mb-3 block">{t.shop.eyebrow}</span>
         <h1 className="font-display text-[clamp(36px,10vw,96px)] md:text-7xl lg:text-8xl xl:text-9xl tracking-ultra-tight leading-[0.9] capitalize break-words">
-          {active === 'all' ? 'All Pieces' : active}
+          {active === 'all' ? t.shop.allPieces : getCategoryLabel(active)}
         </h1>
       </div>
 
@@ -57,27 +76,27 @@ export default function Shop() {
               )}
               data-cursor="hover"
             >
-              {c === 'all' ? 'All' : c}
+              {getCategoryLabel(c)}
             </button>
           ))}
         </nav>
         <div className="flex flex-wrap items-center gap-3 md:gap-4">
           <span className="text-[11px] md:text-[12px] uppercase tracking-wide-lg text-muted">
-            {filtered.length} {filtered.length === 1 ? 'piece' : 'pieces'}
+            {filtered.length} {filtered.length === 1 ? t.shop.piece : t.shop.pieces}
           </span>
           <span className="hidden md:inline text-line">|</span>
           <div className="flex flex-wrap gap-3 md:gap-4">
-            {sorts.map((s) => (
+            {(['latest', 'price-asc', 'price-desc'] as const).map((s) => (
               <button
-                key={s.value}
-                onClick={() => setSort(s.value)}
+                key={s}
+                onClick={() => setSort(s)}
                 className={cn(
                   'text-[11px] md:text-[12px] uppercase tracking-wide-lg link-line focus:outline-none focus-visible:ring-1 focus-visible:ring-ink',
-                  sort === s.value ? 'text-ochre' : 'text-muted hover:text-ink',
+                  sort === s ? 'text-ochre' : 'text-muted hover:text-ink',
                 )}
                 data-cursor="hover"
               >
-                {s.label}
+                {getSortLabel(s)}
               </button>
             ))}
           </div>
@@ -86,10 +105,10 @@ export default function Shop() {
 
       {filtered.length === 0 ? (
         <div className="py-24 md:py-32 text-center">
-          <span className="eyebrow mb-4 block">— Empty</span>
-          <p className="font-serif italic text-2xl text-muted">No pieces in this category yet.</p>
+          <span className="eyebrow mb-4 block">{t.shop.emptySub}</span>
+          <p className="font-serif italic text-2xl text-muted">{t.shop.empty}</p>
           <Link to="/shop" className="mt-8 inline-block btn-underline text-[11px] uppercase tracking-wide-lg" data-cursor="hover">
-            View all pieces
+            {t.shop.viewAll}
           </Link>
         </div>
       ) : (

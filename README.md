@@ -1,6 +1,8 @@
-# ÉCRU — Atelier Commerce
+# SAIF STORE — Premium Editorial Fashion
 
 A premium, editorial e-commerce frontend. Original brand, original code, original content.
+
+Branded as SAIF STORE — English default, Egyptian Arabic optional, proper RTL.
 
 ## Stack
 - React 18 + TypeScript + Vite
@@ -26,5 +28,6 @@ A premium, editorial e-commerce frontend. Original brand, original code, origina
 - src/store — Zustand stores
 - src/hooks — Lenis, magnetic, mobile detection
 - src/lib — utilities
+- src/i18n — English + Egyptian Arabic translations, LanguageProvider, RTL
 
 Replace src/data/* and image URLs to rebrand.

@@ -2,11 +2,13 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { useCart, cartTotal, cartCount } from '../../store/cart'
 import { formatPrice } from '../../lib/utils'
+import { useLanguage, interpolate } from '../../i18n'
 
 export default function CartDrawer() {
   const { items, isOpen, close, removeItem, updateQuantity } = useCart()
   const total = cartTotal(items)
   const count = cartCount(items)
+  const { t } = useLanguage()
 
   return (
     <AnimatePresence>
@@ -29,19 +31,19 @@ export default function CartDrawer() {
           >
             <div className="flex items-center justify-between border-b border-line px-6 py-5">
               <span className="text-[12px] uppercase tracking-wide-lg">
-                Cart <span className="text-muted">({count})</span>
+                {t.cart.title} <span className="text-muted">({count})</span>
               </span>
               <button onClick={close} className="text-[12px] uppercase tracking-wide-lg link-line" data-cursor="hover">
-                Close
+                {t.cart.close}
               </button>
             </div>
 
             {items.length === 0 ? (
               <div className="flex flex-1 flex-col items-center justify-center gap-6 px-6 text-center">
-                <span className="eyebrow">— Empty</span>
-                <p className="font-display text-2xl tracking-ultra-tight text-ink">Your cart is empty.</p>
+                <span className="eyebrow">{t.cart.emptyEyebrow}</span>
+                <p className="font-display text-2xl tracking-ultra-tight text-ink">{t.cart.emptyTitle}</p>
                 <p className="font-serif italic text-[14px] text-muted max-w-[260px]">
-                  A considered selection awaits in the reserve.
+                  {t.cart.emptySub}
                 </p>
                 <Link
                   to="/shop"
@@ -49,7 +51,7 @@ export default function CartDrawer() {
                   className="btn-underline text-[11px] uppercase tracking-wide-lg mt-2"
                   data-cursor="hover"
                 >
-                  Browse the collection
+                  {t.cart.browseCollection}
                 </Link>
               </div>
             ) : (
@@ -73,11 +75,11 @@ export default function CartDrawer() {
                               className="text-[10px] uppercase tracking-wide-lg text-muted link-line"
                               data-cursor="hover"
                             >
-                              Remove
+                              {t.cart.remove}
                             </button>
                           </div>
                           <p className="mt-1 text-[12px] text-muted">
-                            {item.color} — Size {item.size}
+                            {item.color} — {t.product.size} {item.size}
                           </p>
                         </div>
                         <div className="flex items-end justify-between">
@@ -108,15 +110,15 @@ export default function CartDrawer() {
                 </div>
                 <div className="border-t border-line px-5 py-6 md:px-6">
                   <div className="mb-2 flex justify-between text-[12px] uppercase tracking-wide-lg">
-                    <span>Subtotal</span>
+                    <span>{t.cart.subtotal}</span>
                     <span className="tabular-nums">{formatPrice(total)}</span>
                   </div>
                   {total < 250 && total > 0 && (
                     <p className="mb-3 text-[11px] text-muted">
-                      Add {formatPrice(250 - total)} more for complimentary shipping.
+                      {interpolate(t.cart.freeShippingProgress, { amount: formatPrice(250 - total) })}
                     </p>
                   )}
-                  <p className="mb-4 text-[11px] text-muted">Shipping and duties calculated at checkout.</p>
+                  <p className="mb-4 text-[11px] text-muted">{t.cart.shippingNote}</p>
                   <button
                     onClick={close}
                     className="group relative w-full overflow-hidden border border-ink py-4 text-[11px] uppercase tracking-wide-lg focus:outline-none focus-visible:ring-1 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
@@ -124,7 +126,7 @@ export default function CartDrawer() {
                   >
                     <span className="absolute inset-0 translate-y-full bg-ink transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0" />
                     <span className="relative z-10 transition-colors duration-500 group-hover:text-paper">
-                      Proceed to Checkout
+                      {t.cart.checkout}
                     </span>
                   </button>
                 </div>

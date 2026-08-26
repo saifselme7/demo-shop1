@@ -1,8 +1,10 @@
+import { LocalizedString } from './products'
+
 export interface Collection {
   slug: string
-  title: string
-  subtitle: string
-  description: string
+  title: LocalizedString
+  subtitle: LocalizedString
+  description: LocalizedString
   image: string
   pieces: number
 }
@@ -15,28 +17,34 @@ const img = (id: string, w = 1600) => {
 export const collections: Collection[] = [
   {
     slug: 'aw-reserve',
-    title: 'AW — Reserve',
-    subtitle: 'Cold-weather essentials',
-    description:
-      'Brushed wools, cashmere, and structured outerwear. The considered cold-weather wardrobe.',
+    title: { en: 'AW — Reserve', ar: 'خريف وشتا — تشكيلة خاصة' },
+    subtitle: { en: 'Cold-weather essentials', ar: 'أساسيات الجو البارد' },
+    description: {
+      en: 'Brushed wools, cashmere, and structured outerwear. The considered cold-weather wardrobe.',
+      ar: 'صوف ممشط، كشمير، وملابس خارجية بقصة مظبوطة. دولاب الشتا معمول بحساب.',
+    },
     image: img('premium_photo-1723651300444-c663962dcb92b', 1800),
     pieces: 24,
   },
   {
     slug: 'spring-reserve',
-    title: 'Spring — Reserve',
-    subtitle: 'Linen, poplin and silk',
-    description:
-      'Lightweight tailoring in Irish linen, sandwashed silk, and crisp cotton poplin.',
+    title: { en: 'Spring — Reserve', ar: 'ربيع — تشكيلة خاصة' },
+    subtitle: { en: 'Linen, poplin and silk', ar: 'كتان وبوبلين وحرير' },
+    description: {
+      en: 'Lightweight tailoring in Irish linen, sandwashed silk, and crisp cotton poplin.',
+      ar: 'تفصيل خفيف من كتان إيرلندي وحرير مغسول وقطن بوبلين ناشف.',
+    },
     image: img('premium_photo-1664300166849-dc66a719ee0f', 1800),
     pieces: 18,
   },
   {
     slug: 'atelier-archive',
-    title: 'Atelier — Archive',
-    subtitle: 'Foundational pieces',
-    description:
-      'A studied archive of foundational pieces — patterns refined, never replaced.',
+    title: { en: 'Atelier — Archive', ar: 'الاستوديو — الأرشيف' },
+    subtitle: { en: 'Foundational pieces', ar: 'قطع أساسية' },
+    description: {
+      en: 'A studied archive of foundational pieces — patterns refined, never replaced.',
+      ar: 'أرشيف مدروس من القطع الأساسية — القصات بتتطور، مش بتتغير.',
+    },
     image: img('premium_photo-1663045469848-7df171d1fe04', 1800),
     pieces: 12,
   },

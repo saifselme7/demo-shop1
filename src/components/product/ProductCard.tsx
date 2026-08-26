@@ -4,10 +4,12 @@ import { gsap } from '../../lib/gsap'
 import { Product } from '../../data/products'
 import { formatPrice } from '../../lib/utils'
 import { cn } from '../../lib/utils'
+import { useLanguage } from '../../i18n'
 
 export default function ProductCard({ product, index = 0 }: { product: Product; index?: number }) {
   const [hovered, setHovered] = useState(false)
   const imgRef = useRef<HTMLImageElement>(null)
+  const { t, language } = useLanguage()
 
   const onMouseEnter = () => {
     setHovered(true)
@@ -34,7 +36,7 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
         <img
           ref={imgRef}
           src={product.images[0]}
-          alt={product.name}
+          alt={product.name[language]}
           loading={index < 4 ? 'eager' : 'lazy'}
           decoding="async"
           fetchPriority={index < 2 ? 'high' : 'auto'}
@@ -62,20 +64,20 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
 
         {product.isNew && (
           <span className="absolute left-3 top-3 text-[10px] uppercase tracking-wide-lg text-ink bg-paper/90 px-2.5 py-1 backdrop-blur-md border border-line/50">
-            New
+            {t.common.new}
           </span>
         )}
         <div className="absolute bottom-3 left-3 right-3 flex translate-y-2 items-center justify-between opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
           <span className="bg-paper/90 px-3 py-2 text-[10px] uppercase tracking-wide-lg backdrop-blur-md border border-line/50">
-            View Detail
+            {t.common.viewDetail}
           </span>
         </div>
       </div>
 
       <div className="mt-4 flex items-start justify-between gap-4">
         <div className="min-w-0 flex-1">
-          <h3 className="font-display text-[15px] font-medium leading-tight truncate md:whitespace-normal">{product.name}</h3>
-          <p className="mt-0.5 text-[12px] text-muted line-clamp-1">{product.subtitle}</p>
+          <h3 className="font-display text-[15px] font-medium leading-tight truncate md:whitespace-normal">{product.name[language]}</h3>
+          <p className="mt-0.5 text-[12px] text-muted line-clamp-1">{product.subtitle[language]}</p>
         </div>
         <span className="shrink-0 text-[14px] tabular-nums font-medium">{formatPrice(product.price, product.currency)}</span>
       </div>
@@ -85,7 +87,7 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
             key={c.name}
             className="h-3 w-3 rounded-full border border-line/70 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.6)]"
             style={{ backgroundColor: c.hex }}
-            title={c.name}
+            title={c.label[language]}
           />
         ))}
       </div>
