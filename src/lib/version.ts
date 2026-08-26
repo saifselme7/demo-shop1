@@ -1,5 +1,5 @@
 export const VERSION = {
-  commit: 'fix/navbar-scroll — keep navbar accessible during scroll',
-  expected: 'fixed header wrapper + overflow-x clip fix',
+  commit: 'fix/restore-navbar-animation — restore scroll reveal hide/show',
+  expected: 'scroll down hides, scroll up reveals, accessible from any position',
   date: new Date().toISOString(),
 }
