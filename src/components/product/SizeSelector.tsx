@@ -1,4 +1,5 @@
 import { cn } from '../../lib/utils'
+import { useLanguage } from '../../i18n'
 
 interface Props {
   sizes: string[]
@@ -7,16 +8,17 @@ interface Props {
 }
 
 export default function SizeSelector({ sizes, selected, onSelect }: Props) {
+  const { t } = useLanguage()
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-center justify-between">
-        <span className="eyebrow">Size</span>
+        <span className="eyebrow">{t.product.size}</span>
         <button
           className="text-[11px] uppercase tracking-wide-lg text-muted link-line focus:outline-none focus-visible:ring-1 focus-visible:ring-ink"
           data-cursor="hover"
           title="Size guide — coming soon"
         >
-          Size Guide
+          {t.product.sizeGuide}
         </button>
       </div>
       <div className="flex flex-wrap gap-2.5">
@@ -32,7 +34,7 @@ export default function SizeSelector({ sizes, selected, onSelect }: Props) {
             )}
             data-cursor="hover"
             aria-pressed={selected === s}
-            aria-label={`Select size ${s}`}
+            aria-label={`${t.product.size} ${s}`}
           >
             {s}
           </button>
