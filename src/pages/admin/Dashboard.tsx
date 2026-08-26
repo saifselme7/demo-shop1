@@ -5,7 +5,7 @@ import { VERSION } from '../../lib/version'
 import { isSupabaseConfigured } from '../../lib/supabase'
 
 export default function AdminDashboard() {
-  const [stats, setStats] = useState<{ products: number; categories: number; collections: number; variants: number; lowStock: number; outOfStock: number } | null>(null)
+  const [stats, setStats] = useState<{ products: number; categories: number; collections: number; variants: number; lowStock: number; outOfStock: number; orders: number; pendingOrders: number } | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -24,7 +24,7 @@ export default function AdminDashboard() {
       <div className="flex flex-col gap-6">
         <span className="eyebrow">— Dashboard</span>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {[...Array(6)].map((_, i) => (
+          {[...Array(8)].map((_, i) => (
             <div key={i} className="h-28 bg-cream animate-pulse border border-line" />
           ))}
         </div>
@@ -50,6 +50,8 @@ export default function AdminDashboard() {
 
   const cards = [
     { label: 'Products', value: stats?.products, href: '/admin/products' },
+    { label: 'Orders', value: stats?.orders, href: '/admin/orders' },
+    { label: 'Pending Orders', value: stats?.pendingOrders, href: '/admin/orders' },
     { label: 'Categories', value: stats?.categories, href: '/admin/categories' },
     { label: 'Collections', value: stats?.collections, href: '/admin/collections' },
     { label: 'Variants', value: stats?.variants, href: '/admin/products' },
@@ -62,7 +64,7 @@ export default function AdminDashboard() {
       <div>
         <span className="eyebrow mb-3 block">— Dashboard</span>
         <h1 className="font-display text-4xl md:text-5xl tracking-ultra-tight">SAIF STORE — Admin</h1>
-        <p className="mt-3 text-[13px] text-muted max-w-[480px]">Real-time overview from Supabase. Public storefront remains read-only, admin writes require admin_users authorization.</p>
+        <p className="mt-3 text-[13px] text-muted max-w-[520px]">Real-time overview from Supabase. Orders are manual — customer places order, admin confirms/rejects, stock decreased on confirmation.</p>
         <p className="mt-2 text-[10px] font-mono text-muted">Deployed: {VERSION.commit} | Configured: {isSupabaseConfigured() ? 'YES' : 'NO'}</p>
       </div>
 
@@ -78,6 +80,7 @@ export default function AdminDashboard() {
       <div className="border-t border-line pt-8 flex flex-col gap-3 text-[11px] uppercase tracking-wide-lg text-muted">
         <span>— Quick Actions</span>
         <div className="flex flex-wrap gap-4">
+          <Link to="/admin/orders" className="link-line text-ink">View Orders {stats?.pendingOrders ? `(${stats.pendingOrders} pending)` : ''}</Link>
           <Link to="/admin/products/new" className="link-line text-ink">+ New Product</Link>
           <Link to="/admin/categories" className="link-line text-ink">Manage Categories</Link>
           <Link to="/admin/collections" className="link-line text-ink">Manage Collections</Link>

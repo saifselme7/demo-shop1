@@ -8,6 +8,7 @@ interface Props {
 
 const nav = [
   { label: 'Dashboard', href: '/admin' },
+  { label: 'Orders', href: '/admin/orders' },
   { label: 'Products', href: '/admin/products' },
   { label: 'Categories', href: '/admin/categories' },
   { label: 'Collections', href: '/admin/collections' },
@@ -38,7 +39,9 @@ export default function AdminLayout({ children }: Props) {
               key={n.href}
               to={n.href}
               className={`px-3 py-2.5 text-[12px] uppercase tracking-wide-lg transition-colors ${
-                location.pathname === n.href ? 'bg-ink text-paper' : 'text-ink hover:bg-cream'
+                location.pathname === n.href || (n.href !== '/admin' && location.pathname.startsWith(n.href))
+                  ? 'bg-ink text-paper'
+                  : 'text-ink hover:bg-cream'
               }`}
             >
               {n.label}
@@ -58,7 +61,7 @@ export default function AdminLayout({ children }: Props) {
           <Link to="/admin" className="font-display text-base font-bold tracking-ultra-tight">SAIF STORE — Admin</Link>
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="flex flex-col gap-[5px] p-2"
+            className="flex flex-col gap-[5px] p-2 min-h-[44px] min-w-[44px] flex items-center justify-center"
             aria-label="Toggle menu"
           >
             <span className="block h-px w-6 bg-ink" />
@@ -73,7 +76,9 @@ export default function AdminLayout({ children }: Props) {
                 to={n.href}
                 onClick={() => setMobileOpen(false)}
                 className={`px-3 py-3 text-[12px] uppercase tracking-wide-lg ${
-                  location.pathname === n.href ? 'bg-ink text-paper' : 'bg-cream text-ink'
+                  location.pathname === n.href || (n.href !== '/admin' && location.pathname.startsWith(n.href))
+                    ? 'bg-ink text-paper'
+                    : 'bg-cream text-ink'
                 }`}
               >
                 {n.label}
@@ -81,12 +86,12 @@ export default function AdminLayout({ children }: Props) {
             ))}
             <div className="mt-4 pt-4 border-t border-line flex flex-col gap-3">
               <span className="text-[11px] text-muted">{user?.email}</span>
-              <button onClick={handleLogout} className="text-left text-[11px] uppercase tracking-wide-lg">Logout</button>
-              <Link to="/" className="text-[11px] uppercase tracking-wide-lg text-muted">← Storefront</Link>
+              <button onClick={handleLogout} className="text-left text-[11px] uppercase tracking-wide-lg min-h-[44px]">Logout</button>
+              <Link to="/" className="text-[11px] uppercase tracking-wide-lg text-muted min-h-[44px] flex items-center">← Storefront</Link>
             </div>
           </div>
         )}
-        <main className="flex-1 p-6">{children}</main>
+        <main className="flex-1 p-5">{children}</main>
       </div>
 
       {/* Desktop main */}

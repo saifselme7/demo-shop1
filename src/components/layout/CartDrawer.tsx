@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useCart, cartTotal, cartCount } from '../../store/cart'
 import { formatPrice } from '../../lib/utils'
 
@@ -7,6 +7,12 @@ export default function CartDrawer() {
   const { items, isOpen, close, removeItem, updateQuantity } = useCart()
   const total = cartTotal(items)
   const count = cartCount(items)
+  const navigate = useNavigate()
+
+  const handleCheckout = () => {
+    close()
+    navigate('/checkout')
+  }
 
   return (
     <AnimatePresence>
@@ -118,7 +124,7 @@ export default function CartDrawer() {
                   )}
                   <p className="mb-4 text-[11px] text-muted">Shipping and duties calculated at checkout.</p>
                   <button
-                    onClick={close}
+                    onClick={handleCheckout}
                     className="group relative w-full overflow-hidden border border-ink py-4 text-[11px] uppercase tracking-wide-lg focus:outline-none focus-visible:ring-1 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
                     data-cursor="hover"
                   >
@@ -127,6 +133,9 @@ export default function CartDrawer() {
                       Proceed to Checkout
                     </span>
                   </button>
+                  <Link to="/order-status" onClick={close} className="mt-4 block text-center text-[11px] uppercase tracking-wide-lg text-muted link-line w-fit mx-auto">
+                    Track Order
+                  </Link>
                 </div>
               </>
             )}
