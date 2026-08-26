@@ -38,10 +38,10 @@ export default function Navbar() {
     <header
       ref={navRef}
       className={cn(
-        'sticky top-0 z-50 border-b transition-all duration-500',
+        'relative w-full border-b transition-all duration-500',
         scrolled
           ? 'bg-paper/90 backdrop-blur-xl border-line shadow-[0_1px_0_0_rgba(0,0,0,0.04)]'
-          : 'bg-transparent border-transparent',
+          : 'bg-paper/80 backdrop-blur-md border-line/50 md:bg-transparent md:backdrop-blur-none md:border-transparent',
       )}
     >
       <div className="container-ecru-wide flex h-[68px] items-center justify-between">
