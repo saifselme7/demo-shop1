@@ -12,7 +12,7 @@ export default function About() {
     >
       <section className="relative h-[80vh] overflow-hidden">
         <RevealImage
-          src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=2000&q=80"
+          src="https://images.unsplash.com/photo-1475189771997-b2f0fb50c1ce?auto=format&fit=crop&w=2000&q=80"
           alt="Atelier"
           className="absolute inset-0 h-full w-full"
           imgClassName="h-full w-full object-cover"
@@ -64,12 +64,12 @@ export default function About() {
 
       <section className="container-ecru-wide pb-32 grid gap-6 md:grid-cols-2 md:gap-10">
         <RevealImage
-          src="https://images.unsplash.com/photo-1490481651871-ab68de25d43e?auto=format&fit=crop&w=1400&q=80"
+          src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1400&q=80"
           alt="Atelier"
           className="aspect-[4/5]"
         />
         <RevealImage
-          src="https://images.unsplash.com/photo-1485231183945-8c42f0d6e7a1?auto=format&fit=crop&w=1400&q=80"
+          src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=1400&q=80"
           alt="Cloth"
           className="aspect-[4/5]"
           delay={0.15}

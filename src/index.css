@@ -21,12 +21,19 @@
     overflow-x: hidden;
   }
 
-  body {
+  html.has-custom-cursor body {
     cursor: none;
   }
 
   @media (max-width: 1024px) {
-    body { cursor: auto; }
+    html.has-custom-cursor body { cursor: auto; }
+  }
+
+  /* Ensure inputs show cursor even with custom cursor */
+  html.has-custom-cursor input,
+  html.has-custom-cursor textarea,
+  html.has-custom-cursor [contenteditable] {
+    cursor: text;
   }
 
   ::selection {
@@ -44,6 +51,12 @@
   .lenis.lenis-smooth { scroll-behavior: auto !important; }
   .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
   .lenis.lenis-stopped { overflow: hidden; }
+
+  /* Focus visible for accessibility - premium minimal */
+  :focus-visible {
+    outline: 1px solid #0E0E0E;
+    outline-offset: 2px;
+  }
 }
 
 @layer components {

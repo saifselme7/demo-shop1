@@ -1,11 +1,14 @@
 import { useEffect, useRef } from 'react'
-import { gsap } from 'gsap'
+import { gsap } from '../../lib/gsap'
 
 export default function CustomCursor() {
   const dotRef = useRef<HTMLDivElement>(null)
   const ringRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    if (window.matchMedia('(max-width: 1024px)').matches) return
+    document.documentElement.classList.add('has-custom-cursor')
+
     const dot = dotRef.current
     const ring = ringRef.current
     if (!dot || !ring) return
@@ -16,8 +19,10 @@ export default function CustomCursor() {
     const yRing = gsap.quickTo(ring, 'y', { duration: 0.45, ease: 'power3' })
 
     const onMove = (e: MouseEvent) => {
-      xDot(e.clientX); yDot(e.clientY)
-      xRing(e.clientX); yRing(e.clientY)
+      xDot(e.clientX)
+      yDot(e.clientY)
+      xRing(e.clientX)
+      yRing(e.clientY)
     }
 
     const onOver = (e: Event) => {
@@ -40,6 +45,7 @@ export default function CustomCursor() {
     document.addEventListener('mouseover', onOver)
     document.addEventListener('mouseout', onOut)
     return () => {
+      document.documentElement.classList.remove('has-custom-cursor')
       window.removeEventListener('mousemove', onMove)
       document.removeEventListener('mouseover', onOver)
       document.removeEventListener('mouseout', onOut)

@@ -1,9 +1,6 @@
 import { ReactNode, useEffect, useRef } from 'react'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { gsap, ScrollTrigger } from '../../lib/gsap'
 import { cn } from '../../lib/utils'
-
-gsap.registerPlugin(ScrollTrigger)
 
 interface RevealProps {
   children: ReactNode
@@ -143,6 +140,7 @@ export function RevealImage({
         src={src}
         alt={alt}
         loading="lazy"
+        decoding="async"
         className={cn('h-full w-full object-cover will-change-transform', imgClassName)}
         onError={(e) => {
           const t = e.currentTarget as HTMLImageElement
