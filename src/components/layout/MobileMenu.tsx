@@ -3,13 +3,10 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { site } from '../../data/site'
 import { useUI } from '../../store/ui'
-import { useLanguage } from '../../i18n'
-import LanguageSwitcher from '../ui/LanguageSwitcher'
 
 export default function MobileMenu() {
   const open = useUI((s) => s.mobileMenuOpen)
   const setOpen = useUI((s) => s.setMobileMenu)
-  const { t } = useLanguage()
 
   useEffect(() => {
     if (open) {
@@ -36,16 +33,6 @@ export default function MobileMenu() {
     return () => window.removeEventListener('keydown', onKey)
   }, [open, setOpen])
 
-  const navItems = [
-    { label: t.nav.new, href: '/shop/new' },
-    { label: t.nav.outerwear, href: '/shop/outerwear' },
-    { label: t.nav.knitwear, href: '/shop/knitwear' },
-    { label: t.nav.trousers, href: '/shop/trousers' },
-    { label: t.nav.dresses, href: '/shop/dresses' },
-    { label: t.nav.accessories, href: '/shop/accessories' },
-    { label: t.nav.about, href: '/about' },
-  ]
-
   return (
     <AnimatePresence>
       {open && (
@@ -57,20 +44,17 @@ export default function MobileMenu() {
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         >
           <div className="flex h-[68px] items-center justify-between px-6 border-b border-line">
-            <span className="font-display text-xl font-bold tracking-ultra-tight">SAIF STORE</span>
-            <div className="flex items-center gap-3">
-              <LanguageSwitcher />
-              <button
-                onClick={() => setOpen(false)}
-                className="text-[11px] uppercase tracking-wide-lg px-3 py-2 -me-2 min-h-[44px] min-w-[44px] flex items-center justify-center focus:outline-none focus-visible:ring-1 focus-visible:ring-ink"
-                aria-label="Close menu"
-              >
-                {t.cart.close}
-              </button>
-            </div>
+            <span className="font-display text-2xl font-bold tracking-ultra-tight">SAIF STORE</span>
+            <button
+              onClick={() => setOpen(false)}
+              className="text-[11px] uppercase tracking-wide-lg px-3 py-2 -mr-2 min-h-[44px] min-w-[44px] flex items-center justify-center focus:outline-none focus-visible:ring-1 focus-visible:ring-ink"
+              aria-label="Close menu"
+            >
+              Close
+            </button>
           </div>
           <nav className="flex flex-1 flex-col justify-center gap-1 px-6 py-8">
-            {navItems.map((n, i) => (
+            {site.nav.map((n, i) => (
               <motion.div
                 key={n.href}
                 initial={{ y: 30, opacity: 0 }}

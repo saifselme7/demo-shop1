@@ -21,10 +21,6 @@
     overflow-x: hidden;
   }
 
-  html[lang="ar"] body {
-    font-family: 'Cairo', 'Inter Tight', system-ui, sans-serif;
-  }
-
   html.has-custom-cursor body {
     cursor: none;
   }
@@ -33,6 +29,7 @@
     html.has-custom-cursor body { cursor: auto; }
   }
 
+  /* Ensure inputs show cursor even with custom cursor */
   html.has-custom-cursor input,
   html.has-custom-cursor textarea,
   html.has-custom-cursor [contenteditable] {
@@ -50,35 +47,15 @@
     letter-spacing: -0.02em;
   }
 
-  html[lang="ar"] h1,
-  html[lang="ar"] h2,
-  html[lang="ar"] h3,
-  html[lang="ar"] h4,
-  html[lang="ar"] h5,
-  html[lang="ar"] .font-display {
-    font-family: 'Cairo', 'Syne', system-ui, sans-serif;
-    letter-spacing: -0.01em;
-  }
-
-  html[lang="ar"] .font-serif {
-    font-family: 'Cairo', system-ui, sans-serif;
-    font-style: normal;
-    font-weight: 400;
-  }
-
   html.lenis, html.lenis body { height: auto; }
   .lenis.lenis-smooth { scroll-behavior: auto !important; }
   .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
   .lenis.lenis-stopped { overflow: hidden; }
 
+  /* Focus visible for accessibility - premium minimal */
   :focus-visible {
     outline: 1px solid #0E0E0E;
     outline-offset: 2px;
-  }
-
-  /* RTL logical adjustments */
-  html[dir="rtl"] {
-    /* Keep editorial, but ensure logical */
   }
 }
 
@@ -106,11 +83,6 @@
 
   .btn-underline:hover::after {
     @apply w-0;
-  }
-
-  html[dir="rtl"] .btn-underline::after {
-    left: auto;
-    right: 0;
   }
 }
 
@@ -172,13 +144,6 @@
 .link-line:hover::after {
   transform: scaleX(1);
   transform-origin: left;
-}
-
-html[dir="rtl"] .link-line::after {
-  transform-origin: left;
-}
-html[dir="rtl"] .link-line:hover::after {
-  transform-origin: right;
 }
 
 .no-scrollbar::-webkit-scrollbar { display: none; }

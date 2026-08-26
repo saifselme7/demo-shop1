@@ -1,10 +1,8 @@
 import { useEffect, useRef } from 'react'
 import { gsap, ScrollTrigger } from '../lib/gsap'
-import { useLanguage } from '../i18n'
 
 export default function Manifesto() {
   const root = useRef<HTMLElement>(null)
-  const { t } = useLanguage()
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -27,14 +25,14 @@ export default function Manifesto() {
       )
     }, root)
     return () => ctx.revert()
-  }, [t.manifesto.text])
+  }, [])
 
   return (
     <section ref={root} className="py-24 md:py-32 lg:py-48">
       <div className="container-ecru">
-        <span className="eyebrow mb-8 md:mb-10 block">{t.manifesto.eyebrow}</span>
-        <p className="manifesto-text font-display text-2xl md:text-4xl lg:text-5xl xl:text-6xl tracking-ultra-tight leading-[1.15] text-ink">
-          {t.manifesto.text}
+        <span className="eyebrow mb-8 md:mb-10 block">— Manifesto</span>
+        <p className="manifesto-text font-display text-3xl md:text-5xl lg:text-6xl xl:text-7xl tracking-ultra-tight leading-[1.05] text-ink">
+          We believe in fewer, better garments. Patterns refined across seasons, cloth chosen for hand and longevity, and editions numbered, never replenished. A wardrobe considered, not consumed.
         </p>
       </div>
     </section>
