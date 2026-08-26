@@ -16,8 +16,10 @@ export interface Product {
   isNew?: boolean
 }
 
-const img = (id: string, w = 1200) =>
-  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`
+const img = (id: string, w = 1200) => {
+  const full = id.startsWith('photo-') || id.startsWith('premium_photo-') ? id : `photo-${id}`
+  return `https://images.unsplash.com/${full}?auto=format&fit=crop&w=${w}&q=80`
+}
 
 export const products: Product[] = [
   {
@@ -43,8 +45,8 @@ export const products: Product[] = [
       { name: 'Camel', hex: '#A88B66' },
     ],
     images: [
-      img('1490481651871-ab68de25d43e', 1400),
-      img('1483985988355-763728e1935b', 1400),
+      img('1490481651871-ab68de25d43d', 1400),
+      img('1485230895905-ec40ba36b9bc', 1400),
     ],
     featured: true,
     isNew: true,
@@ -72,8 +74,8 @@ export const products: Product[] = [
       { name: 'Stone', hex: '#A39782' },
     ],
     images: [
-      img('1483985988355-763728e1935b', 1400),
-      img('1490481651871-ab68de25d43e', 1400),
+      img('1608748010899-18f300247112', 1400),
+      img('1621190595987-0d5f9b449233', 1400),
     ],
     featured: true,
     isNew: true,
@@ -101,8 +103,8 @@ export const products: Product[] = [
       { name: 'Sand', hex: '#C7B79A' },
     ],
     images: [
-      img('1594633353590-b3f1dd9b1ae0', 1400),
-      img('1551806030-6d4d1d9f87e7', 1400),
+      img('1594633312687-16307288dd64', 1400),
+      img('1506629082955-21b7767d54a1', 1400),
     ],
     featured: true,
   },
@@ -129,8 +131,8 @@ export const products: Product[] = [
       { name: 'Ink', hex: '#1B1B1B' },
     ],
     images: [
-      img('1496748560446-9d4be976f3a6', 1400),
-      img('1485231183945-eee0c1a4d5e5', 1400),
+      img('1518570305330-b4e045569e53', 1400),
+      img('premium_photo-1661657720305-ec3a988c8763', 1400),
     ],
     featured: true,
   },
@@ -158,7 +160,7 @@ export const products: Product[] = [
     ],
     images: [
       img('1485231183945-8c42f0d6e7a1', 1400),
-      img('1490481651871-ab68de25d43e', 1400),
+      img('1515882315439-5a6cbf8b7c8c', 1400),
     ],
     featured: true,
   },
@@ -185,8 +187,8 @@ export const products: Product[] = [
       { name: 'Slate', hex: '#444444' },
     ],
     images: [
-      img('1483985988355-763728e1935b', 1400),
-      img('1594633353590-b3f1dd9b1ae0', 1400),
+      img('1434389677669-e08b4cac3105', 1400),
+      img('1758537698215-af1e35acb911', 1400),
     ],
     featured: true,
   },
@@ -213,8 +215,8 @@ export const products: Product[] = [
       { name: 'Washed Black', hex: '#2C2C2C' },
     ],
     images: [
-      img('1551806030-6d4d1d9f87e7', 1400),
-      img('1594633353590-b3f1dd9b1ae0', 1400),
+      img('1594631252845-29fc4cc8cde9', 1400),
+      img('1507680434567-5739c80be1e1', 1400),
     ],
     featured: true,
   },
@@ -241,8 +243,8 @@ export const products: Product[] = [
       { name: 'Black', hex: '#0E0E0E' },
     ],
     images: [
-      img('1485231183945-eee0c1a4d5e5', 1400),
-      img('1496748560446-9d4be976f3a6', 1400),
+      img('1485968579580-b6d095142e6f', 1400),
+      img('1496747613729-02e3241d429f', 1400),
     ],
     featured: true,
   },
@@ -269,8 +271,8 @@ export const products: Product[] = [
       { name: 'Black', hex: '#0E0E0E' },
     ],
     images: [
-      img('1547947273-187e3d3c1c44', 1400),
-      img('1591561453011-ee9b6b5b1c5b', 1400),
+      img('1547949003-97960816d757', 1400),
+      img('1590874103328-eac38a683ce7', 1400),
     ],
     featured: true,
     isNew: true,
@@ -298,8 +300,8 @@ export const products: Product[] = [
       { name: 'Graphite', hex: '#3A3A3A' },
     ],
     images: [
-      img('1605558651109-8b3e3a3c7b1f', 1400),
-      img('1601928286213-3a8b3b1c5b1f', 1400),
+      img('1523779105320-d1cd346ff52b', 1400),
+      img('1601758228045-3c1a6c43c9b0', 1400),
     ],
     featured: true,
   },
@@ -326,8 +328,8 @@ export const products: Product[] = [
       { name: 'Sky', hex: '#9FB3C8' },
     ],
     images: [
-      img('1485231183945-8c42f0d6e7a1', 1400),
-      img('1601928286213-3a8b3b1c5b1f', 1400),
+      img('1483985988355-763728e1935b', 1400),
+      img('1445205170230-053b83016050', 1400),
     ],
     featured: true,
   },
@@ -354,8 +356,8 @@ export const products: Product[] = [
       { name: 'Soot', hex: '#2A2A2A' },
     ],
     images: [
-      img('1601928286213-3a8b3b1c5b1f', 1400),
-      img('1591561453011-ee9b6b5b1c5b', 1400),
+      img('1469334031218-e382a71b716b', 1400),
+      img('1539109136881-3be0616acf4b', 1400),
     ],
     featured: true,
   },

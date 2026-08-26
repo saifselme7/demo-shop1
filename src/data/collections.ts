@@ -7,8 +7,10 @@ export interface Collection {
   pieces: number
 }
 
-const img = (id: string, w = 1600) =>
-  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`
+const img = (id: string, w = 1600) => {
+  const full = id.startsWith('photo-') || id.startsWith('premium_photo-') ? id : `photo-${id}`
+  return `https://images.unsplash.com/${full}?auto=format&fit=crop&w=${w}&q=80`
+}
 
 export const collections: Collection[] = [
   {
@@ -17,7 +19,7 @@ export const collections: Collection[] = [
     subtitle: 'Cold-weather essentials',
     description:
       'Brushed wools, cashmere, and structured outerwear. The considered cold-weather wardrobe.',
-    image: img('1490481651871-ab68de25d43e', 1800),
+    image: img('premium_photo-1723651300444-c663962dcb92b', 1800),
     pieces: 24,
   },
   {
@@ -26,7 +28,7 @@ export const collections: Collection[] = [
     subtitle: 'Linen, poplin and silk',
     description:
       'Lightweight tailoring in Irish linen, sandwashed silk, and crisp cotton poplin.',
-    image: img('1485231183945-8c42f0d6e7a1', 1800),
+    image: img('premium_photo-1664300166849-dc66a719ee0f', 1800),
     pieces: 18,
   },
   {
@@ -35,7 +37,7 @@ export const collections: Collection[] = [
     subtitle: 'Foundational pieces',
     description:
       'A studied archive of foundational pieces — patterns refined, never replaced.',
-    image: img('1483985988355-763728e1935b', 1800),
+    image: img('premium_photo-1663045469848-7df171d1fe04', 1800),
     pieces: 12,
   },
 ]

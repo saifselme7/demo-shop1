@@ -1,10 +1,7 @@
 import { useEffect, useRef } from 'react'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { gsap, ScrollTrigger } from '../lib/gsap'
 import MagneticButton from '../components/ui/MagneticButton'
 import { site } from '../data/site'
-
-gsap.registerPlugin(ScrollTrigger)
 
 export default function Hero() {
   const root = useRef<HTMLDivElement>(null)
@@ -42,11 +39,14 @@ export default function Hero() {
     <section ref={root} className="relative h-[100svh] min-h-[600px] overflow-hidden">
       <div className="hero-image absolute inset-0 overflow-hidden">
         <img
-          src="https://images.unsplash.com/photo-1490481651871-ab68de25d43e?auto=format&fit=crop&w=2000&q=80"
+          src="https://images.unsplash.com/photo-1637248666370-70a4a603c23e?auto=format&fit=crop&w=2000&q=80"
           alt="ÉCRU AW Reserve"
           className="h-[115%] w-full object-cover"
+          loading="eager"
+          decoding="async"
+          fetchPriority="high"
           onError={(e) => {
-            (e.currentTarget as HTMLImageElement).style.background = 'linear-gradient(135deg,#E8E0D3,#6B4F2A)'
+            ;(e.currentTarget as HTMLImageElement).style.background = 'linear-gradient(135deg,#E8E0D3,#6B4F2A)'
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/10 via-transparent to-ink/30" />
@@ -59,7 +59,7 @@ export default function Hero() {
         </div>
 
         <div className="max-w-[1400px]">
-          <h1 className="font-display text-[14vw] md:text-[12vw] lg:text-[11vw] xl:text-[10vw] leading-[0.85] tracking-ultra-tight text-paper">
+          <h1 className="font-display text-[clamp(48px,14vw,160px)] md:text-[12vw] lg:text-[11vw] xl:text-[10vw] leading-[0.85] tracking-ultra-tight text-paper">
             <span className="block overflow-hidden"><span className="hero-line inline-block">Garments for</span></span>
             <span className="block overflow-hidden"><span className="hero-line inline-block">the considered</span></span>
             <span className="block overflow-hidden"><span className="hero-line inline-block font-serif italic font-normal">life.</span></span>
@@ -73,11 +73,11 @@ export default function Hero() {
               made in numbered editions, intended to endure.
             </p>
           </div>
-          <div className="hero-cta flex flex-wrap gap-4">
-            <MagneticButton to="/shop" variant="solid" className="text-paper">
+          <div className="hero-cta flex flex-col w-full gap-3 sm:w-auto sm:flex-row sm:flex-wrap">
+            <MagneticButton to="/shop" variant="solid" className="w-full sm:w-auto justify-center text-paper">
               Browse the collection
             </MagneticButton>
-            <MagneticButton to="/about" variant="outline" className="border-paper text-paper">
+            <MagneticButton to="/about" variant="outline" className="w-full sm:w-auto justify-center border-paper text-paper">
               The atelier
             </MagneticButton>
           </div>

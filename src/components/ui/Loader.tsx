@@ -1,8 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { gsap } from 'gsap'
+import { gsap } from '../../lib/gsap'
 
-export default function Loader() {
+interface Props {
+  onComplete?: () => void
+}
+
+export default function Loader({ onComplete }: Props) {
   const [count, setCount] = useState(0)
   const ref = useRef<HTMLDivElement>(null)
 
@@ -25,12 +29,15 @@ export default function Loader() {
             duration: 1,
             delay: 0.3,
             ease: 'power3.inOut',
+            onComplete: () => {
+              onComplete?.()
+            },
           })
         },
       })
     })
     return () => ctx.revert()
-  }, [])
+  }, [onComplete])
 
   return (
     <motion.div

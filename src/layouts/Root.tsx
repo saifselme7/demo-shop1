@@ -7,6 +7,7 @@ import MobileMenu from '../components/layout/MobileMenu'
 import CartDrawer from '../components/layout/CartDrawer'
 import Footer from '../components/layout/Footer'
 import { useLenis } from '../hooks/useLenis'
+import { ScrollTrigger } from '../lib/gsap'
 
 export default function Root({ children }: { children: ReactNode }) {
   const location = useLocation()
@@ -16,6 +17,7 @@ export default function Root({ children }: { children: ReactNode }) {
     const lenis = (window as any).lenis
     if (lenis) lenis.scrollTo(0, { immediate: true })
     window.scrollTo(0, 0)
+    setTimeout(() => ScrollTrigger.refresh(), 100)
   }, [location.pathname])
 
   return (

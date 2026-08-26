@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { gsap } from 'gsap'
+import { gsap } from '../../lib/gsap'
 import { site } from '../../data/site'
 import { useCart, cartCount } from '../../store/cart'
 import { useUI } from '../../store/ui'
@@ -17,7 +17,7 @@ export default function Navbar() {
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50)
     onScroll()
-    window.addEventListener('scroll', onScroll)
+    window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
@@ -41,7 +41,7 @@ export default function Navbar() {
       className={cn(
         'sticky top-0 z-50 border-b transition-all duration-500',
         scrolled
-          ? 'bg-paper/85 backdrop-blur-md border-line'
+          ? 'bg-paper/90 backdrop-blur-xl border-line shadow-[0_1px_0_0_rgba(0,0,0,0.04)]'
           : 'bg-transparent border-transparent',
       )}
     >
@@ -52,7 +52,7 @@ export default function Navbar() {
               key={n.href}
               to={n.href}
               className={cn(
-                'nav-item link-line text-[12px] uppercase tracking-wide-lg text-ink',
+                'nav-item link-line text-[12px] uppercase tracking-wide-lg text-ink focus:outline-none focus-visible:ring-1 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper',
                 location.pathname === n.href && 'text-ochre',
               )}
               data-cursor="hover"
@@ -64,7 +64,7 @@ export default function Navbar() {
 
         <Link
           to="/"
-          className="nav-item absolute left-1/2 -translate-x-1/2 font-display text-2xl font-bold tracking-ultra-tight text-ink"
+          className="nav-item absolute left-1/2 -translate-x-1/2 font-display text-2xl font-bold tracking-ultra-tight text-ink focus:outline-none focus-visible:ring-1 focus-visible:ring-ink"
           data-cursor="hover"
         >
           ÉCRU
@@ -77,7 +77,7 @@ export default function Navbar() {
                 key={n.href}
                 to={n.href}
                 className={cn(
-                  'nav-item link-line text-[12px] uppercase tracking-wide-lg text-ink',
+                  'nav-item link-line text-[12px] uppercase tracking-wide-lg text-ink focus:outline-none focus-visible:ring-1 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper',
                   location.pathname === n.href && 'text-ochre',
                 )}
                 data-cursor="hover"
@@ -87,24 +87,27 @@ export default function Navbar() {
             ))}
           </nav>
           <button
-            className="nav-item text-[12px] uppercase tracking-wide-lg text-ink link-line hidden md:inline-block"
+            className="nav-item text-[12px] uppercase tracking-wide-lg text-ink link-line hidden md:inline-block focus:outline-none focus-visible:ring-1 focus-visible:ring-ink"
             data-cursor="hover"
+            title="Search — coming soon"
+            aria-label="Search"
           >
             Search
           </button>
           <button
             onClick={open}
-            className="nav-item relative text-[12px] uppercase tracking-wide-lg text-ink"
+            className="nav-item relative text-[12px] uppercase tracking-wide-lg text-ink focus:outline-none focus-visible:ring-1 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
             data-cursor="hover"
+            aria-label="Open cart"
           >
             Cart
-            <span className="ml-1.5 inline-flex items-center justify-center text-[10px]">
+            <span className="ml-1.5 inline-flex items-center justify-center text-[10px] tabular-nums">
               ({cartCount(items)})
             </span>
           </button>
           <button
             onClick={() => setMobileMenu(true)}
-            className="lg:hidden flex flex-col gap-[5px] p-2"
+            className="lg:hidden flex flex-col gap-[6px] p-3 -mr-2 focus:outline-none focus-visible:ring-1 focus-visible:ring-ink"
             data-cursor="hover"
             aria-label="Open menu"
           >

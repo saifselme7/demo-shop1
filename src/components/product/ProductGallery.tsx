@@ -6,7 +6,7 @@ export default function ProductGallery({ images, alt }: { images: string[]; alt:
   const [active, setActive] = useState(0)
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-3 md:gap-4">
       <div className="relative aspect-[3/4] overflow-hidden bg-cream">
         <AnimatePresence mode="wait">
           <motion.img
@@ -18,24 +18,29 @@ export default function ProductGallery({ images, alt }: { images: string[]; alt:
             exit={{ opacity: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             className="absolute inset-0 h-full w-full object-cover"
+            loading={active === 0 ? 'eager' : 'lazy'}
+            decoding="async"
+            fetchPriority={active === 0 ? 'high' : 'auto'}
             onError={(e) => {
-              (e.currentTarget as HTMLImageElement).style.background = 'linear-gradient(135deg,#E8E0D3,#C9BBA4)'
+              ;(e.currentTarget as HTMLImageElement).style.background = 'linear-gradient(135deg,#E8E0D3,#C9BBA4)'
             }}
           />
         </AnimatePresence>
       </div>
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-4 gap-2 md:gap-3">
         {images.map((src, i) => (
           <button
             key={i}
             onClick={() => setActive(i)}
             className={cn(
-              'relative aspect-[3/4] overflow-hidden bg-cream transition-all duration-500',
-              active === i ? 'ring-1 ring-ink' : 'opacity-60 hover:opacity-100',
+              'relative aspect-[3/4] overflow-hidden bg-cream transition-all duration-500 focus:outline-none focus-visible:ring-1 focus-visible:ring-ink',
+              active === i ? 'ring-1 ring-ink ring-offset-1 ring-offset-paper' : 'opacity-60 hover:opacity-100 hover:ring-1 hover:ring-line',
             )}
             data-cursor="hover"
+            aria-label={`View image ${i + 1}`}
+            aria-pressed={active === i}
           >
-            <img src={src} alt="" className="h-full w-full object-cover" />
+            <img src={src} alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" />
           </button>
         ))}
       </div>

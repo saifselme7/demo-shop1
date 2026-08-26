@@ -3,10 +3,10 @@ import { RevealImage } from '../components/ui/Reveal'
 import { Reveal, RevealText } from '../components/ui/Reveal'
 
 const cats = [
-  { label: 'Outerwear', slug: 'outerwear', image: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43e?auto=format&fit=crop&w=1200&q=80' },
-  { label: 'Knitwear', slug: 'knitwear', image: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1200&q=80' },
-  { label: 'Trousers', slug: 'trousers', image: 'https://images.unsplash.com/photo-1594633353590-b3f1dd9b1ae0?auto=format&fit=crop&w=1200&q=80' },
-  { label: 'Dresses', slug: 'dresses', image: 'https://images.unsplash.com/photo-1496748560446-9d4be976f3a6?auto=format&fit=crop&w=1200&q=80' },
+  { label: 'Outerwear', slug: 'outerwear', image: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1200&q=80' },
+  { label: 'Knitwear', slug: 'knitwear', image: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=1200&q=80' },
+  { label: 'Trousers', slug: 'trousers', image: 'https://images.unsplash.com/photo-1584302058527-2e90841a2227?auto=format&fit=crop&w=1200&q=80' },
+  { label: 'Dresses', slug: 'dresses', image: 'https://images.unsplash.com/photo-1571513808435-6d0d1c7d7a24?auto=format&fit=crop&w=1200&q=80' },
 ]
 
 export default function Categories() {
