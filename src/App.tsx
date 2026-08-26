@@ -8,6 +8,9 @@ import Product from './pages/Product'
 import About from './pages/About'
 import NotFound from './pages/NotFound'
 import Loader from './components/ui/Loader'
+import Checkout from './pages/Checkout'
+import OrderSuccess from './pages/OrderSuccess'
+import OrderStatus from './pages/OrderStatus'
 import AdminLogin from './pages/admin/Login'
 import AdminDashboard from './pages/admin/Dashboard'
 import AdminProducts from './pages/admin/Products'
@@ -15,6 +18,8 @@ import ProductForm from './pages/admin/ProductForm'
 import AdminCategories from './pages/admin/Categories'
 import AdminCollections from './pages/admin/Collections'
 import AdminDiagnostic from './pages/admin/Diagnostic'
+import AdminOrders from './pages/admin/Orders'
+import AdminOrderDetail from './pages/admin/OrderDetail'
 import AdminLayout from './components/admin/AdminLayout'
 import ProtectedRoute from './components/admin/ProtectedRoute'
 
@@ -99,6 +104,26 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/admin/orders"
+          element={
+            <ProtectedRoute>
+              <AdminLayout>
+                <AdminOrders />
+              </AdminLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/orders/:id"
+          element={
+            <ProtectedRoute>
+              <AdminLayout>
+                <AdminOrderDetail />
+              </AdminLayout>
+            </ProtectedRoute>
+          }
+        />
 
         {/* Storefront routes inside Root */}
         <Route
@@ -112,6 +137,9 @@ export default function App() {
                   <Route path="/shop/:category" element={<Shop />} />
                   <Route path="/product/:slug" element={<Product />} />
                   <Route path="/about" element={<About />} />
+                  <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/order-success/:orderNumber" element={<OrderSuccess />} />
+                  <Route path="/order-status" element={<OrderStatus />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </AnimatePresence>

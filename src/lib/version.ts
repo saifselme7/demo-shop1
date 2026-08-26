@@ -1,5 +1,5 @@
 export const VERSION = {
-  commit: 'fix/admin-runtime-diagnostic — 3d357a0 + vercel.json + RLS fix',
-  expected: '25f4adb + 004_fix_admin_rls.sql',
+  commit: 'feat/production-completion — production-ready + orders + storage fix',
+  expected: 'main should include 001-006 migrations + admin + orders',
   date: new Date().toISOString(),
 }

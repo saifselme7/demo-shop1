@@ -9,7 +9,8 @@ export interface Collection {
 
 const img = (id: string, w = 1600) => {
   const full = id.startsWith('photo-') || id.startsWith('premium_photo-') ? id : `photo-${id}`
-  return `https://images.unsplash.com/${full}?auto=format&fit=crop&w=${w}&q=80`
+  const domain = full.startsWith('premium_photo-') ? 'plus.unsplash.com' : 'images.unsplash.com'
+  return `https://${domain}/${full}?auto=format&fit=crop&w=${w}&q=80`
 }
 
 export const collections: Collection[] = [
