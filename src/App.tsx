@@ -14,6 +14,7 @@ import AdminProducts from './pages/admin/Products'
 import ProductForm from './pages/admin/ProductForm'
 import AdminCategories from './pages/admin/Categories'
 import AdminCollections from './pages/admin/Collections'
+import AdminDiagnostic from './pages/admin/Diagnostic'
 import AdminLayout from './components/admin/AdminLayout'
 import ProtectedRoute from './components/admin/ProtectedRoute'
 
@@ -34,6 +35,16 @@ export default function App() {
             <ProtectedRoute>
               <AdminLayout>
                 <AdminDashboard />
+              </AdminLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/diagnostic"
+          element={
+            <ProtectedRoute>
+              <AdminLayout>
+                <AdminDiagnostic />
               </AdminLayout>
             </ProtectedRoute>
           }

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { getDashboardStats } from '../../services/admin/dashboard'
+import { VERSION } from '../../lib/version'
+import { isSupabaseConfigured } from '../../lib/supabase'
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState<{ products: number; categories: number; collections: number; variants: number; lowStock: number; outOfStock: number } | null>(null)
@@ -10,7 +12,10 @@ export default function AdminDashboard() {
   useEffect(() => {
     getDashboardStats()
       .then(setStats)
-      .catch((e) => setError(e.message))
+      .catch((e) => {
+        console.error('Dashboard stats failed', e)
+        setError(e.message)
+      })
       .finally(() => setLoading(false))
   }, [])
 
@@ -29,10 +34,16 @@ export default function AdminDashboard() {
 
   if (error) {
     return (
-      <div className="py-12">
+      <div className="py-12 flex flex-col gap-4">
         <span className="eyebrow mb-4 block">— Error</span>
-        <p className="font-serif italic text-xl text-muted">Unable to load dashboard.</p>
-        <p className="mt-2 text-[11px] uppercase tracking-wide-lg text-muted">{error}</p>
+        <p className="font-serif italic text-xl text-muted">Unable to load dashboard — Supabase connection failed.</p>
+        <p className="mt-2 text-[11px] uppercase tracking-wide-lg text-ochre break-words whitespace-pre-wrap">{error}</p>
+        <div className="mt-4 border border-line bg-cream p-4 text-[11px] leading-relaxed">
+          <div>SUPABASE URL PRESENT: {isSupabaseConfigured() ? 'YES' : 'NO'}</div>
+          <div>Check Vercel env vars VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY (must be prefixed VITE_ and set for Production, then redeploy).</div>
+          <div className="mt-2">Deployed: {VERSION.commit}</div>
+          <div>Expected: {VERSION.expected}</div>
+        </div>
       </div>
     )
   }
@@ -52,6 +63,7 @@ export default function AdminDashboard() {
         <span className="eyebrow mb-3 block">— Dashboard</span>
         <h1 className="font-display text-4xl md:text-5xl tracking-ultra-tight">SAIF STORE — Admin</h1>
         <p className="mt-3 text-[13px] text-muted max-w-[480px]">Real-time overview from Supabase. Public storefront remains read-only, admin writes require admin_users authorization.</p>
+        <p className="mt-2 text-[10px] font-mono text-muted">Deployed: {VERSION.commit} | Configured: {isSupabaseConfigured() ? 'YES' : 'NO'}</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -69,6 +81,7 @@ export default function AdminDashboard() {
           <Link to="/admin/products/new" className="link-line text-ink">+ New Product</Link>
           <Link to="/admin/categories" className="link-line text-ink">Manage Categories</Link>
           <Link to="/admin/collections" className="link-line text-ink">Manage Collections</Link>
+          <Link to="/admin/diagnostic" className="link-line text-ink">Run Diagnostic</Link>
         </div>
       </div>
     </div>
