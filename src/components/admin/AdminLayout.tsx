@@ -11,6 +11,7 @@ const nav = [
   { label: 'Products', href: '/admin/products' },
   { label: 'Categories', href: '/admin/categories' },
   { label: 'Collections', href: '/admin/collections' },
+  { label: 'Diagnostic', href: '/admin/diagnostic' },
 ]
 
 export default function AdminLayout({ children }: Props) {
