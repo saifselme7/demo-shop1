@@ -59,8 +59,8 @@ export default function ProductForm({ mode }: { mode: 'create' | 'edit' }) {
   const [variantsText, setVariantsText] = useState('')
 
   useEffect(() => {
-    getCategories().then(setCategories).catch(() => {})
-    getCollections().then(setCollections).catch(() => {})
+    getCategories().then(setCategories).catch((e) => console.error('Categories load failed', e))
+    getCollections().then(setCollections).catch((e) => console.error('Collections load failed', e))
   }, [])
 
   useEffect(() => {
@@ -88,7 +88,10 @@ export default function ProductForm({ mode }: { mode: 'create' | 'edit' }) {
           const variants = (p.variants || []).map((v: any) => `${v.color_name}:${v.color_hex}:${v.size}:${v.sku}:${v.stock}`).join('\n')
           setVariantsText(variants)
         })
-        .catch((e) => setError(e.message))
+        .catch((e) => {
+          console.error('Product load failed', e)
+          setError(e.message)
+        })
         .finally(() => setLoading(false))
     }
   }, [mode, id])
@@ -118,21 +121,21 @@ export default function ProductForm({ mode }: { mode: 'create' | 'edit' }) {
       if (isNaN(price)) throw new Error('Price must be a number')
 
       const compare = form.compare_at_price ? parseFloat(form.compare_at_price) : null
-      const details = form.details.split('\n').map((s) => s.trim()).filter(Boolean)
+      const details = form.details.split(/\r?\n/).map((s) => s.trim()).filter(Boolean)
       const sizes = form.sizes.split(',').map((s) => s.trim()).filter(Boolean)
-      const colors = form.colors.split('\n').map((line) => {
+      const colors = form.colors.split(/\r?\n/).map((line) => {
         const [name, hex] = line.split(':').map((s) => s.trim())
         if (!name || !hex) return null
         return { name, hex }
       }).filter(Boolean) as { name: string; hex: string }[]
 
-      const images = form.images.split('\n').map((line, idx) => {
+      const images = form.images.split(/\r?\n/).map((line, idx) => {
         const [url, alt] = line.split('|').map((s) => s.trim())
         if (!url) return null
         return { image_url: url, alt_text: alt || '', sort_order: idx }
       }).filter(Boolean) as { image_url: string; alt_text: string; sort_order: number }[]
 
-      const variants = variantsText.split('\n').map((line) => {
+      const variants = variantsText.split(/\r?\n/).map((line) => {
         const [color_name, color_hex, size, sku, stockStr] = line.split(':').map((s) => s.trim())
         if (!color_name || !color_hex || !size || !sku) return null
         const stock = parseInt(stockStr || '10', 10)
@@ -159,7 +162,7 @@ export default function ProductForm({ mode }: { mode: 'create' | 'edit' }) {
         })
         if (images.length > 0) await adminSetProductImages(form.id, images)
         if (variants.length > 0) await adminSetProductVariants(form.id, variants)
-        setSuccess('Product created successfully')
+        setSuccess('Product created successfully — will appear in storefront after refresh')
         setTimeout(() => navigate('/admin/products'), 1000)
       } else if (id) {
         await adminUpdateProduct(id, {
@@ -180,9 +183,10 @@ export default function ProductForm({ mode }: { mode: 'create' | 'edit' }) {
         } as any)
         await adminSetProductImages(id, images)
         await adminSetProductVariants(id, variants)
-        setSuccess('Product updated successfully')
+        setSuccess('Product updated successfully — storefront will reflect changes')
       }
     } catch (err: any) {
+      console.error('Save failed', err)
       setError(err.message)
     } finally {
       setSaving(false)
@@ -290,10 +294,10 @@ export default function ProductForm({ mode }: { mode: 'create' | 'edit' }) {
           <p className="text-[11px] text-muted">Preserve order, first is primary for ProductCard hover swap</p>
           {form.images && (
             <div className="flex gap-2 mt-2 flex-wrap">
-              {form.images.split('\n').map((line, i) => {
+              {form.images.split(/\r?\n/).map((line, i) => {
                 const url = line.split('|')[0]?.trim()
                 if (!url) return null
-                return <img key={i} src={url} alt="" className="h-16 w-12 object-cover border border-line" />
+                return <img key={i} src={url} alt="" className="h-16 w-12 object-cover border border-line" onError={(e) => (e.currentTarget.style.display = 'none')} />
               })}
             </div>
           )}
@@ -305,7 +309,7 @@ export default function ProductForm({ mode }: { mode: 'create' | 'edit' }) {
           <p className="text-[11px] text-muted">Unique per product+color+size, stock controls availability in storefront</p>
         </div>
 
-        {error && <div className="border border-ochre/30 bg-ochre/10 px-4 py-3 text-[12px] text-ochre">{error}</div>}
+        {error && <div className="border border-ochre/30 bg-ochre/10 px-4 py-3 text-[12px] text-ochre whitespace-pre-wrap break-words">{error}</div>}
         {success && <div className="border border-green-700/30 bg-green-700/10 px-4 py-3 text-[12px] text-green-800">{success}</div>}
 
         <div className="flex gap-3">

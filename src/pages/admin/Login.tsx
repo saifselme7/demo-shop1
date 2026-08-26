@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { supabase } from '../../lib/supabase'
+import { supabase, isSupabaseConfigured } from '../../lib/supabase'
 import { useAdminAuth } from '../../hooks/useAdminAuth'
 
 export default function AdminLogin() {
@@ -22,6 +22,12 @@ export default function AdminLogin() {
     setLoading(true)
     setError(null)
 
+    if (!isSupabaseConfigured()) {
+      setError('Supabase not configured — check Vercel env vars VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY')
+      setLoading(false)
+      return
+    }
+
     const { data, error: signInError } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -34,15 +40,23 @@ export default function AdminLogin() {
     }
 
     if (data.user) {
-      // Check admin
+      // Check admin using maybeSingle
       const { data: adminData, error: adminError } = await supabase
         .from('admin_users')
         .select('user_id')
         .eq('user_id', data.user.id)
-        .single()
+        .maybeSingle()
 
-      if (adminError || !adminData) {
-        setError('Access denied — not an admin. Contact owner to add your user to admin_users.')
+      if (adminError) {
+        console.error('Admin check error:', adminError)
+        setError(`Admin check failed: ${adminError.message}. Ensure migration 003 ran and admin_users table exists.`)
+        await supabase.auth.signOut()
+        setLoading(false)
+        return
+      }
+
+      if (!adminData) {
+        setError(`Access denied — not an admin. Your ID: ${data.user.id}. Add it to admin_users: insert into admin_users (user_id, email) values ('${data.user.id}', '${data.user.email}');`)
         await supabase.auth.signOut()
         setLoading(false)
         return
@@ -56,11 +70,17 @@ export default function AdminLogin() {
 
   return (
     <div className="min-h-screen bg-paper flex items-center justify-center px-6">
-      <div className="w-full max-w-[380px] border border-line bg-paper p-8">
+      <div className="w-full max-w-[400px] border border-line bg-paper p-8">
         <div className="mb-8">
           <h1 className="font-display text-3xl tracking-ultra-tight">SAIF STORE</h1>
           <p className="mt-2 text-[11px] uppercase tracking-wide-lg text-muted">Admin — Sign In</p>
         </div>
+
+        {!isSupabaseConfigured() && (
+          <div className="mb-6 border border-ochre/30 bg-ochre/10 px-4 py-3 text-[11px] leading-relaxed text-ochre">
+            Supabase not configured. Check Vercel env vars VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY (must be prefixed with VITE_).
+          </div>
+        )}
 
         <form onSubmit={handleLogin} className="flex flex-col gap-5">
           <div className="flex flex-col gap-2">
@@ -88,7 +108,7 @@ export default function AdminLogin() {
           </div>
 
           {error && (
-            <div className="border border-ochre/30 bg-ochre/10 px-4 py-3 text-[12px] leading-relaxed text-ochre">
+            <div className="border border-ochre/30 bg-ochre/10 px-4 py-3 text-[12px] leading-relaxed text-ochre whitespace-pre-wrap break-words">
               {error}
             </div>
           )}
@@ -102,9 +122,12 @@ export default function AdminLogin() {
             <span className="relative z-10 group-hover:text-paper transition-colors">{loading ? 'Signing in...' : 'Sign In'}</span>
           </button>
 
-          <p className="text-[11px] text-muted leading-relaxed">
-            Use Supabase Auth. Admin must exist in admin_users table. First admin must be added manually via Supabase Dashboard.
-          </p>
+          <div className="text-[11px] text-muted leading-relaxed border-t border-line pt-4">
+            <p>First admin must be added manually via Supabase Dashboard:</p>
+            <code className="mt-2 block bg-cream border border-line p-2 text-[10px] break-all">
+              insert into admin_users (user_id, email) values ('&lt;your-auth-uuid&gt;', 'admin@saifstore.com');
+            </code>
+          </div>
         </form>
       </div>
     </div>
