@@ -1,30 +1,62 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { getProduct, getRelated } from '../data/products'
 import { useCart } from '../store/cart'
 import { formatPrice } from '../lib/utils'
 import ProductGallery from '../components/product/ProductGallery'
 import SizeSelector from '../components/product/SizeSelector'
 import ProductCard from '../components/product/ProductCard'
 import { Reveal, RevealText } from '../components/ui/Reveal'
+import { useProductBySlug, useRelatedProducts } from '../hooks/useProducts'
 
 export default function Product() {
   const { slug } = useParams()
-  const product = slug ? getProduct(slug) : undefined
-  const related = slug ? getRelated(slug, 4) : []
+  const { product, loading, error } = useProductBySlug(slug)
+  const { products: related, loading: relatedLoading } = useRelatedProducts(product?.slug, product?.category, 4)
+
   const addItem = useCart((s) => s.addItem)
   const [size, setSize] = useState<string | null>(null)
-  const [color, setColor] = useState(product?.colors[0]?.name || '')
-  const [error, setError] = useState(false)
+  const [color, setColor] = useState('')
+  const [sizeError, setSizeError] = useState(false)
   const [added, setAdded] = useState(false)
 
   useEffect(() => {
-    setSize(null)
-    setColor(product?.colors[0]?.name || '')
-    setError(false)
-    setAdded(false)
-  }, [slug, product?.colors])
+    if (product) {
+      setSize(null)
+      setColor(product.colors[0]?.name || '')
+      setSizeError(false)
+      setAdded(false)
+    }
+  }, [product?.id])
+
+  if (loading) {
+    return (
+      <div className="container-ecru-wide py-8 md:py-12">
+        <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
+          <div className="aspect-[3/4] bg-cream animate-pulse" />
+          <div className="flex flex-col gap-6">
+            <div className="h-8 bg-cream animate-pulse w-1/2" />
+            <div className="h-12 bg-cream animate-pulse" />
+            <div className="h-6 bg-cream animate-pulse w-3/4" />
+            <div className="h-20 bg-cream animate-pulse" />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="container-ecru py-32 md:py-40 text-center">
+        <span className="eyebrow mb-4 block">— Error</span>
+        <p className="font-display text-3xl md:text-4xl tracking-ultra-tight">Unable to load product.</p>
+        <p className="mt-3 text-[11px] uppercase tracking-wide-lg text-muted">{error}</p>
+        <Link to="/shop" className="mt-8 inline-block btn-underline text-[11px] uppercase tracking-wide-lg" data-cursor="hover">
+          Return to shop
+        </Link>
+      </div>
+    )
+  }
 
   if (!product) {
     return (
@@ -41,9 +73,16 @@ export default function Product() {
 
   const onAdd = () => {
     if (!size) {
-      setError(true)
+      setSizeError(true)
       return
     }
+    // Check stock for selected variant if available
+    const variant = product.variants?.find((v) => v.color_name === color && v.size === size)
+    if (variant && variant.stock <= 0) {
+      setSizeError(true)
+      return
+    }
+
     addItem({
       id: product.id,
       slug: product.slug,
@@ -58,6 +97,9 @@ export default function Product() {
     setTimeout(() => setAdded(false), 2000)
   }
 
+  const selectedVariant = product.variants?.find((v) => v.color_name === color && v.size === size)
+  const isOutOfStock = selectedVariant ? selectedVariant.stock <= 0 : false
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -66,7 +108,7 @@ export default function Product() {
       transition={{ duration: 0.4 }}
     >
       <div className="container-ecru-wide py-6 md:py-10 lg:py-12">
-        <nav className="mb-6 md:mb-8 text-[11px] uppercase tracking-wide-lg text-muted overflow-x-auto whitespace-nowrap no-scrollbar">
+        <nav className="mb-6 md:mb-8 text-[11px] uppercase tracking-wide-lg text-muted overflow-x-auto whitespace-nowrap no-scrollbar flex items-center">
           <Link to="/" className="link-line">Home</Link>
           <span className="mx-2 md:mx-3">/</span>
           <Link to={`/shop/${product.category}`} className="link-line capitalize">{product.category}</Link>
@@ -95,8 +137,18 @@ export default function Product() {
                 <span className="font-display text-xl md:text-2xl tracking-ultra-tight">
                   {formatPrice(product.price, product.currency)}
                 </span>
+                {product.compareAtPrice && (
+                  <span className="text-[14px] line-through text-muted tabular-nums">
+                    {formatPrice(product.compareAtPrice, product.currency)}
+                  </span>
+                )}
                 <span className="text-[11px] md:text-[12px] uppercase tracking-wide-lg text-muted">incl. tax</span>
               </div>
+              {selectedVariant && (
+                <p className="mt-2 text-[11px] uppercase tracking-wide-lg text-muted">
+                  Stock: {selectedVariant.stock} {selectedVariant.stock === 1 ? 'piece' : 'pieces'} — SKU: {selectedVariant.sku}
+                </p>
+              )}
             </Reveal>
 
             <Reveal delay={0.35}>
@@ -128,10 +180,10 @@ export default function Product() {
 
             <Reveal delay={0.45}>
               <div className="mt-8">
-                <SizeSelector sizes={product.sizes} selected={size} onSelect={(s) => { setSize(s); setError(false) }} />
-                {error && (
+                <SizeSelector sizes={product.sizes} selected={size} onSelect={(s) => { setSize(s); setSizeError(false) }} />
+                {sizeError && (
                   <p className="mt-3 text-[11px] md:text-[12px] uppercase tracking-wide-lg text-ochre">
-                    — Please select a size
+                    {isOutOfStock ? '— Out of stock for this variant' : '— Please select a size'}
                   </p>
                 )}
               </div>
@@ -141,13 +193,14 @@ export default function Product() {
               <div className="mt-8">
                 <button
                   onClick={onAdd}
-                  className="group relative w-full overflow-hidden border border-ink py-5 text-[11px] md:text-[12px] uppercase tracking-wide-lg focus:outline-none focus-visible:ring-1 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
+                  disabled={isOutOfStock}
+                  className="group relative w-full overflow-hidden border border-ink py-5 text-[11px] md:text-[12px] uppercase tracking-wide-lg focus:outline-none focus-visible:ring-1 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper disabled:opacity-50 disabled:cursor-not-allowed"
                   data-cursor="hover"
                   aria-label="Add to cart"
                 >
-                  <span className="absolute inset-0 translate-y-full bg-ink transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0" />
-                  <span className="relative z-10 transition-colors duration-500 group-hover:text-paper">
-                    {added ? 'Added — View Cart' : `Add to cart — ${formatPrice(product.price, product.currency)}`}
+                  <span className="absolute inset-0 translate-y-full bg-ink transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0 group-disabled:translate-y-full" />
+                  <span className="relative z-10 transition-colors duration-500 group-hover:text-paper group-disabled:text-ink">
+                    {added ? 'Added — View Cart' : isOutOfStock ? 'Out of stock' : `Add to cart — ${formatPrice(product.price, product.currency)}`}
                   </span>
                 </button>
                 {added && (
@@ -187,11 +240,19 @@ export default function Product() {
               Browse all
             </Link>
           </div>
-          <div className="grid grid-cols-2 gap-x-4 gap-y-10 md:gap-x-6 md:gap-y-16 lg:grid-cols-4">
-            {related.map((p, i) => (
-              <ProductCard key={p.id} product={p} index={i} />
-            ))}
-          </div>
+          {relatedLoading ? (
+            <div className="grid grid-cols-2 gap-x-4 gap-y-10 md:gap-x-6 md:gap-y-16 lg:grid-cols-4">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="aspect-[3/4] bg-cream animate-pulse" />
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-x-4 gap-y-10 md:gap-x-6 md:gap-y-16 lg:grid-cols-4">
+              {related.map((p, i) => (
+                <ProductCard key={p.id} product={p} index={i} />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </motion.div>

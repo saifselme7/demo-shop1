@@ -2,13 +2,15 @@ import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { gsap, ScrollTrigger } from '../lib/gsap'
 import ProductCard from '../components/product/ProductCard'
-import { featured } from '../data/products'
 import { Reveal, RevealText } from '../components/ui/Reveal'
+import { useFeaturedProducts } from '../hooks/useProducts'
 
 export default function FeaturedProducts() {
   const sectionRef = useRef<HTMLElement>(null)
+  const { products: featured, loading, error } = useFeaturedProducts(8)
 
   useEffect(() => {
+    if (loading || error || featured.length === 0) return
     const ctx = gsap.context(() => {
       gsap.from('.featured-grid > *', {
         y: 60,
@@ -20,7 +22,7 @@ export default function FeaturedProducts() {
       })
     }, sectionRef)
     return () => ctx.revert()
-  }, [])
+  }, [loading, error, featured])
 
   return (
     <section ref={sectionRef} className="container-ecru-wide py-20 md:py-28 lg:py-32">
@@ -35,22 +37,37 @@ export default function FeaturedProducts() {
         </div>
         <Reveal>
           <Link to="/shop" className="btn-underline text-[11px] uppercase tracking-wide-lg focus:outline-none focus-visible:ring-1 focus-visible:ring-ink" data-cursor="hover">
-            View all — {featured.length} pieces
+            {loading ? 'View all — ...' : `View all — ${featured.length} pieces`}
           </Link>
         </Reveal>
       </div>
 
-      <div className="featured-grid grid grid-cols-2 gap-x-4 gap-y-10 md:gap-x-6 md:gap-y-16 lg:grid-cols-4">
-        {featured.slice(0, 4).map((p, i) => (
-          <ProductCard key={p.id} product={p} index={i} />
-        ))}
-      </div>
+      {loading ? (
+        <div className="featured-grid grid grid-cols-2 gap-x-4 gap-y-10 md:gap-x-6 md:gap-y-16 lg:grid-cols-4">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="aspect-[3/4] bg-cream animate-pulse" />
+          ))}
+        </div>
+      ) : error ? (
+        <div className="py-12 text-center">
+          <p className="font-serif italic text-xl text-muted">Unable to load reserve. Please try again.</p>
+          <p className="mt-2 text-[11px] uppercase tracking-wide-lg text-muted">{error}</p>
+        </div>
+      ) : (
+        <>
+          <div className="featured-grid grid grid-cols-2 gap-x-4 gap-y-10 md:gap-x-6 md:gap-y-16 lg:grid-cols-4">
+            {featured.slice(0, 4).map((p, i) => (
+              <ProductCard key={p.id} product={p} index={i} />
+            ))}
+          </div>
 
-      <div className="mt-16 md:mt-20 hidden md:grid grid-cols-2 gap-x-6 gap-y-16 lg:grid-cols-4">
-        {featured.slice(4, 8).map((p, i) => (
-          <ProductCard key={p.id} product={p} index={i + 4} />
-        ))}
-      </div>
+          <div className="mt-16 md:mt-20 hidden md:grid grid-cols-2 gap-x-6 gap-y-16 lg:grid-cols-4">
+            {featured.slice(4, 8).map((p, i) => (
+              <ProductCard key={p.id} product={p} index={i + 4} />
+            ))}
+          </div>
+        </>
+      )}
     </section>
   )
 }

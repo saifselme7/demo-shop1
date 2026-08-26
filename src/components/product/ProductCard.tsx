@@ -1,11 +1,11 @@
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { gsap } from '../../lib/gsap'
-import { Product } from '../../data/products'
+import { UIProduct } from '../../services/types'
 import { formatPrice } from '../../lib/utils'
 import { cn } from '../../lib/utils'
 
-export default function ProductCard({ product, index = 0 }: { product: Product; index?: number }) {
+export default function ProductCard({ product, index = 0 }: { product: UIProduct; index?: number }) {
   const [hovered, setHovered] = useState(false)
   const imgRef = useRef<HTMLImageElement>(null)
 

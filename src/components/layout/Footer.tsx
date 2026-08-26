@@ -1,14 +1,16 @@
 import { Link } from 'react-router-dom'
 import { site } from '../../data/site'
-import { collections } from '../../data/collections'
+import { useCollections } from '../../hooks/useCollections'
 
 export default function Footer() {
+  const { collections } = useCollections()
+
   return (
     <footer className="border-t border-line bg-paper">
       <div className="container-ecru-wide py-16 md:py-20">
         <div className="grid grid-cols-1 gap-10 md:gap-12 lg:grid-cols-12">
           <div className="lg:col-span-5">
-            <h2 className="font-display text-6xl md:text-7xl lg:text-8xl xl:text-9xl tracking-ultra-tight leading-none">
+            <h2 className="font-display text-5xl md:text-6xl lg:text-7xl xl:text-8xl tracking-ultra-tight leading-none">
               SAIF STORE
             </h2>
             <p className="mt-5 md:mt-6 max-w-md font-serif italic text-lg text-muted">
@@ -36,7 +38,7 @@ export default function Footer() {
             <ul className="flex flex-col gap-2.5 text-[13px] md:text-[14px]">
               {collections.map((c) => (
                 <li key={c.slug}>
-                  <Link to={`/shop?collection=${c.slug}`} className="link-line focus:outline-none focus-visible:ring-1 focus-visible:ring-ink" data-cursor="hover">{c.title}</Link>
+                  <Link to={`/shop?collection=${c.slug}`} className="link-line focus:outline-none focus-visible:ring-1 focus-visible:ring-ink" data-cursor="hover">{c.name}</Link>
                 </li>
               ))}
             </ul>

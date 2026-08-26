@@ -1,8 +1,35 @@
 import { Link } from 'react-router-dom'
 import { Reveal, RevealImage, RevealText } from '../components/ui/Reveal'
-import { collections } from '../data/collections'
+import { useCollections } from '../hooks/useCollections'
 
 export default function Editorial() {
+  const { collections, loading, error } = useCollections()
+
+  if (loading) {
+    return (
+      <section className="py-16 md:py-24 lg:py-32">
+        <div className="container-ecru-wide grid gap-6 lg:grid-cols-12">
+          <div className="lg:col-span-8 aspect-[16/10] bg-cream animate-pulse" />
+          <div className="lg:col-span-4 flex flex-col gap-4">
+            <div className="h-6 bg-cream animate-pulse w-1/2" />
+            <div className="h-10 bg-cream animate-pulse" />
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  if (error) {
+    return (
+      <section className="py-16 md:py-24 lg:py-32">
+        <div className="container-ecru-wide text-center">
+          <p className="font-serif italic text-lg text-muted">Unable to load collections.</p>
+          <p className="mt-2 text-[11px] uppercase tracking-wide-lg text-muted">{error}</p>
+        </div>
+      </section>
+    )
+  }
+
   return (
     <section className="py-16 md:py-24 lg:py-32">
       {collections.map((c, i) => (
@@ -12,8 +39,8 @@ export default function Editorial() {
         >
           <div className="lg:col-span-8">
             <RevealImage
-              src={c.image}
-              alt={c.title}
+              src={c.image_url || ''}
+              alt={c.name}
               className="aspect-[4/5] md:aspect-[16/10]"
               parallax
             />
@@ -22,7 +49,7 @@ export default function Editorial() {
             <span className="eyebrow mb-3 block">— Collection {String(i + 1).padStart(2, '0')}</span>
             <RevealText
               as="h3"
-              text={c.title}
+              text={c.name}
               className="font-display text-3xl md:text-4xl lg:text-5xl tracking-ultra-tight leading-[0.95]"
             />
             <Reveal delay={0.2}>
