@@ -2,11 +2,29 @@ import { useEffect, useRef } from 'react'
 import { gsap, ScrollTrigger } from '../lib/gsap'
 import MagneticButton from '../components/ui/MagneticButton'
 import { site } from '../data/site'
+import { useHero } from '../hooks/useHero'
 
 export default function Hero() {
   const root = useRef<HTMLDivElement>(null)
+  const { hero, loading } = useHero()
+
+  // Fallback content (matches seed)
+  const content = hero || {
+    eyebrow: 'THE ATELIER',
+    title: 'Garments for\nthe considered\nlife.',
+    description: 'A studied wardrobe of essential pieces — patterns refined across seasons, made in numbered editions, intended to endure.',
+    primary_button_text: 'BROWSE THE COLLECTION',
+    primary_button_link: '/shop',
+    secondary_button_text: 'THE ATELIER',
+    secondary_button_link: '/about',
+    background_image_url: 'https://images.unsplash.com/photo-1637248666370-70a4a603c23e?auto=format&fit=crop&w=2000&q=80',
+    background_image_alt: 'SAIF STORE AW Reserve',
+  }
+
+  const titleLines = content.title.split('\n')
 
   useEffect(() => {
+    if (loading) return
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ delay: 2.8 })
       tl.from('.hero-eyebrow', { y: 20, opacity: 0, duration: 0.8, ease: 'power3.out' })
@@ -33,14 +51,14 @@ export default function Hero() {
       })
     }, root)
     return () => ctx.revert()
-  }, [])
+  }, [loading, content.title])
 
   return (
     <section ref={root} className="relative h-[100svh] min-h-[600px] overflow-hidden">
       <div className="hero-image absolute inset-0 overflow-hidden">
         <img
-          src="https://images.unsplash.com/photo-1637248666370-70a4a603c23e?auto=format&fit=crop&w=2000&q=80"
-          alt="SAIF STORE AW Reserve"
+          src={content.background_image_url}
+          alt={content.background_image_alt || 'SAIF STORE'}
           className="h-[115%] w-full object-cover"
           loading="eager"
           decoding="async"
@@ -53,32 +71,33 @@ export default function Hero() {
       </div>
 
       <div className="hero-content relative z-10 flex h-full flex-col justify-between px-6 py-10 md:px-10 md:py-12 lg:px-16 lg:py-16">
-        <div className="flex items-start justify-between">
-          <span className="hero-eyebrow eyebrow text-paper/80">SAIF STORE — AW / Reserve ’25</span>
-          <span className="hero-eyebrow hidden text-paper/80 md:block">{site.city}</span>
+        <div className="flex items-start justify-between gap-4">
+          <span className="hero-eyebrow eyebrow text-paper/80 truncate max-w-[60%]">{content.eyebrow}</span>
+          <span className="hero-eyebrow hidden text-paper/80 md:block shrink-0">{site.city}</span>
         </div>
 
         <div className="max-w-[1400px]">
-          <h1 className="font-display text-[clamp(48px,14vw,160px)] md:text-[12vw] lg:text-[11vw] xl:text-[10vw] leading-[0.85] tracking-ultra-tight text-paper">
-            <span className="block overflow-hidden"><span className="hero-line inline-block">Garments for</span></span>
-            <span className="block overflow-hidden"><span className="hero-line inline-block">the considered</span></span>
-            <span className="block overflow-hidden"><span className="hero-line inline-block font-serif italic font-normal">life.</span></span>
+          <h1 className="font-display text-[clamp(36px,12vw,160px)] md:text-[12vw] lg:text-[11vw] xl:text-[10vw] leading-[0.85] tracking-ultra-tight text-paper break-words">
+            {titleLines.map((line, i) => (
+              <span key={i} className="block overflow-hidden">
+                <span className={`hero-line inline-block ${i === titleLines.length - 1 ? 'font-serif italic font-normal' : ''}`}>{line}</span>
+              </span>
+            ))}
           </h1>
         </div>
 
-        <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+        <div className="flex flex-col gap-6 md:gap-8 md:flex-row md:items-end md:justify-between">
           <div className="hero-meta max-w-md">
-            <p className="text-paper/90 text-[15px] leading-relaxed">
-              A studied wardrobe of essential pieces — patterns refined across seasons,
-              made in numbered editions, intended to endure.
+            <p className="text-paper/90 text-[14px] md:text-[15px] leading-relaxed break-words">
+              {content.description}
             </p>
           </div>
           <div className="hero-cta flex flex-col w-full gap-3 sm:w-auto sm:flex-row sm:flex-wrap">
-            <MagneticButton to="/shop" variant="solid" className="w-full sm:w-auto justify-center text-paper">
-              Browse the collection
+            <MagneticButton to={content.primary_button_link} variant="solid" className="w-full sm:w-auto justify-center text-paper min-h-[44px]">
+              {content.primary_button_text}
             </MagneticButton>
-            <MagneticButton to="/about" variant="outline" className="w-full sm:w-auto justify-center border-paper text-paper">
-              The atelier
+            <MagneticButton to={content.secondary_button_link} variant="outline" className="w-full sm:w-auto justify-center border-paper text-paper min-h-[44px]">
+              {content.secondary_button_text}
             </MagneticButton>
           </div>
         </div>

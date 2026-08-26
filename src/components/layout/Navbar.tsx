@@ -11,6 +11,7 @@ export default function Navbar() {
   const items = useCart((s) => s.items)
   const open = useCart((s) => s.open)
   const setMobileMenu = useUI((s) => s.setMobileMenu)
+  const setSearchOpen = useUI((s) => s.setSearchOpen)
   const [scrolled, setScrolled] = useState(false)
   const navRef = useRef<HTMLElement>(null)
 
@@ -64,13 +65,13 @@ export default function Navbar() {
 
         <Link
           to="/"
-          className="nav-item absolute left-1/2 -translate-x-1/2 font-display text-2xl font-bold tracking-ultra-tight text-ink focus:outline-none focus-visible:ring-1 focus-visible:ring-ink"
+          className="nav-item absolute left-1/2 -translate-x-1/2 font-display text-xl md:text-2xl font-bold tracking-ultra-tight text-ink focus:outline-none focus-visible:ring-1 focus-visible:ring-ink whitespace-nowrap"
           data-cursor="hover"
         >
           SAIF STORE
         </Link>
 
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-3 md:gap-5">
           <nav className="hidden lg:flex items-center gap-7">
             {site.nav.slice(4).map((n) => (
               <Link
@@ -87,27 +88,27 @@ export default function Navbar() {
             ))}
           </nav>
           <button
-            className="nav-item text-[12px] uppercase tracking-wide-lg text-ink link-line hidden md:inline-block focus:outline-none focus-visible:ring-1 focus-visible:ring-ink"
+            onClick={() => setSearchOpen(true)}
+            className="nav-item text-[12px] uppercase tracking-wide-lg text-ink link-line hidden md:inline-block focus:outline-none focus-visible:ring-1 focus-visible:ring-ink min-h-[44px] px-2"
             data-cursor="hover"
-            title="Search — coming soon"
             aria-label="Search"
           >
             Search
           </button>
           <button
             onClick={open}
-            className="nav-item relative text-[12px] uppercase tracking-wide-lg text-ink focus:outline-none focus-visible:ring-1 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
+            className="nav-item relative text-[12px] uppercase tracking-wide-lg text-ink focus:outline-none focus-visible:ring-1 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper min-h-[44px] px-2"
             data-cursor="hover"
             aria-label="Open cart"
           >
             Cart
-            <span className="ml-1.5 inline-flex items-center justify-center text-[10px] tabular-nums">
+            <span className="ms-1.5 inline-flex items-center justify-center text-[10px] tabular-nums">
               ({cartCount(items)})
             </span>
           </button>
           <button
             onClick={() => setMobileMenu(true)}
-            className="lg:hidden flex flex-col gap-[6px] p-3 -mr-2 focus:outline-none focus-visible:ring-1 focus-visible:ring-ink"
+            className="lg:hidden flex flex-col gap-[6px] p-3 -me-2 focus:outline-none focus-visible:ring-1 focus-visible:ring-ink min-h-[44px] min-w-[44px] justify-center"
             data-cursor="hover"
             aria-label="Open menu"
           >
