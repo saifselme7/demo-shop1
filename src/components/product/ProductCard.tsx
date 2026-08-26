@@ -4,14 +4,15 @@ import { gsap } from '../../lib/gsap'
 import { UIProduct } from '../../services/types'
 import { formatPrice } from '../../lib/utils'
 import { cn } from '../../lib/utils'
+import SafeImage from '../ui/SafeImage'
 
 export default function ProductCard({ product, index = 0 }: { product: UIProduct; index?: number }) {
   const [hovered, setHovered] = useState(false)
-  const imgRef = useRef<HTMLImageElement>(null)
+  const imgRef = useRef<HTMLDivElement>(null)
 
   const onMouseEnter = () => {
     setHovered(true)
-    if (imgRef.current && product.images[1]) {
+    if (imgRef.current) {
       gsap.to(imgRef.current, { opacity: 0, duration: 0.4, ease: 'power2.inOut' })
     }
   }
@@ -31,33 +32,30 @@ export default function ProductCard({ product, index = 0 }: { product: UIProduct
       onMouseLeave={onMouseLeave}
     >
       <div className="relative aspect-[3/4] overflow-hidden bg-cream">
-        <img
-          ref={imgRef}
-          src={product.images[0]}
-          alt={product.name}
-          loading={index < 4 ? 'eager' : 'lazy'}
-          decoding="async"
-          fetchPriority={index < 2 ? 'high' : 'auto'}
-          className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
-          onError={(e) => {
-            ;(e.currentTarget as HTMLImageElement).style.background = 'linear-gradient(135deg,#E8E0D3,#C9BBA4)'
-          }}
-        />
+        <div ref={imgRef} className="absolute inset-0">
+          <SafeImage
+            src={product.images[0]}
+            alt={product.name}
+            loading={index < 4 ? 'eager' : 'lazy'}
+            fetchPriority={index < 2 ? 'high' : 'auto'}
+            className="absolute inset-0 h-full w-full"
+            imgClassName="transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+          />
+        </div>
         {product.images[1] && (
-          <img
-            src={product.images[1]}
-            alt=""
-            aria-hidden
-            loading="lazy"
-            decoding="async"
+          <div
             className={cn(
-              'absolute inset-0 h-full w-full object-cover transition-opacity duration-700',
+              'absolute inset-0 transition-opacity duration-700',
               hovered ? 'opacity-100' : 'opacity-0',
             )}
-            onError={(e) => {
-              ;(e.currentTarget as HTMLImageElement).style.background = 'linear-gradient(135deg,#C9BBA4,#E8E0D3)'
-            }}
-          />
+            aria-hidden
+          >
+            <SafeImage
+              src={product.images[1]}
+              alt=""
+              className="h-full w-full"
+            />
+          </div>
         )}
 
         {product.isNew && (
