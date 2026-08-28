@@ -13,6 +13,7 @@ const nav = [
   { label: 'Categories', href: '/admin/categories' },
   { label: 'Collections', href: '/admin/collections' },
   { label: 'Hero', href: '/admin/hero' },
+  { label: 'Payment Settings', href: '/admin/payment-settings' },
   { label: 'Diagnostic', href: '/admin/diagnostic' },
 ]
 

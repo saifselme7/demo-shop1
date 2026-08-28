@@ -21,7 +21,13 @@ export default function FeaturedProducts() {
         scrollTrigger: { trigger: '.featured-grid', start: 'top 80%' },
       })
     }, sectionRef)
-    return () => ctx.revert()
+    // Measure triggers once the grid DOM exists and again after paint,
+    // so cards don't stay hidden waiting for the first scroll.
+    const raf = requestAnimationFrame(() => ScrollTrigger.refresh())
+    return () => {
+      cancelAnimationFrame(raf)
+      ctx.revert()
+    }
   }, [loading, error, featured])
 
   return (

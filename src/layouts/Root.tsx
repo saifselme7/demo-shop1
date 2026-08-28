@@ -22,10 +22,29 @@ export default function Root({ children }: { children: ReactNode }) {
   const ticking = useRef(false)
 
   useEffect(() => {
+    // Reset scroll position on navigation.
     const lenis = (window as any).lenis
     if (lenis) lenis.scrollTo(0, { immediate: true })
     window.scrollTo(0, 0)
-    setTimeout(() => ScrollTrigger.refresh(), 100)
+
+    // Refresh ScrollTrigger once the new route's DOM has painted, then once
+    // more after images/fonts have a chance to settle the layout. This keeps
+    // below-the-fold reveal triggers armed immediately after client-side
+    // navigation (they previously could stay hidden until the first scroll).
+    let raf2 = 0
+    const raf1 = requestAnimationFrame(() => {
+      ScrollTrigger.refresh()
+      raf2 = requestAnimationFrame(() => ScrollTrigger.refresh())
+    })
+    const t1 = window.setTimeout(() => ScrollTrigger.refresh(), 300)
+    const t2 = window.setTimeout(() => ScrollTrigger.refresh(), 800)
+
+    return () => {
+      cancelAnimationFrame(raf1)
+      cancelAnimationFrame(raf2)
+      window.clearTimeout(t1)
+      window.clearTimeout(t2)
+    }
   }, [location.pathname])
 
   // Scroll direction detection compatible with Lenis

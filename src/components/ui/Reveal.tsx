@@ -40,7 +40,7 @@ export function Reveal({ children, className, delay = 0, y = 30, duration = 1 }:
 interface RevealTextProps {
   text: string
   className?: string
-  as?: 'h1' | 'h2' | 'h3' | 'p' | 'span'
+  as?: 'h1' | 'h2' | 'h3' | 'p' | 'span' | 'div'
   delay?: number
   stagger?: number
 }

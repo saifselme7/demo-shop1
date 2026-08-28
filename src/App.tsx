@@ -22,6 +22,7 @@ import AdminDiagnostic from './pages/admin/Diagnostic'
 import AdminOrders from './pages/admin/Orders'
 import AdminOrderDetail from './pages/admin/OrderDetail'
 import AdminHero from './pages/admin/Hero'
+import AdminPaymentSettings from './pages/admin/PaymentSettings'
 import AdminLayout from './components/admin/AdminLayout'
 import ProtectedRoute from './components/admin/ProtectedRoute'
 
@@ -132,6 +133,16 @@ export default function App() {
             <ProtectedRoute>
               <AdminLayout>
                 <AdminHero />
+              </AdminLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/payment-settings"
+          element={
+            <ProtectedRoute>
+              <AdminLayout>
+                <AdminPaymentSettings />
               </AdminLayout>
             </ProtectedRoute>
           }

@@ -3,9 +3,11 @@ import { gsap, ScrollTrigger } from '../lib/gsap'
 import MagneticButton from '../components/ui/MagneticButton'
 import { site } from '../data/site'
 import { useHero } from '../hooks/useHero'
+import { useIntroHeroPlay } from '../hooks/useIntroPlay'
 
 export default function Hero() {
   const root = useRef<HTMLDivElement>(null)
+  const imgRef = useRef<HTMLImageElement>(null)
   const { hero, loading } = useHero()
 
   // Fallback content (matches seed)
@@ -23,10 +25,23 @@ export default function Hero() {
 
   const titleLines = content.title.split('\n')
 
+  // Initial-load / navigation animation lifecycle.
+  // The entrance timeline only runs once the intro signal fires:
+  //  - first load: when the intro Loader curtain begins lifting
+  //  - navigation back to "/": immediately (no loader is present)
+  // This removes the fixed 2.8s delay that left the hero hidden/frozen
+  // and made the page look broken until the user scrolled.
+  const introReady = useIntroHeroPlay()
+
   useEffect(() => {
     if (loading) return
+    if (!introReady) return
+    if (!root.current) return
+
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ delay: 2.8 })
+      const tl = gsap.timeline({ defaults: { immediateRender: true } })
+
+      // Existing hero entrance — unchanged visual language.
       tl.from('.hero-eyebrow', { y: 20, opacity: 0, duration: 0.8, ease: 'power3.out' })
         .from('.hero-line', { yPercent: 110, opacity: 0, duration: 1.2, stagger: 0.12, ease: 'power4.out' }, '-=0.4')
         .from('.hero-meta', { y: 20, opacity: 0, duration: 0.8, stagger: 0.08, ease: 'power3.out' }, '-=0.6')
@@ -38,6 +53,7 @@ export default function Hero() {
         }, '-=1')
         .from('.hero-image img', { scale: 1.3, duration: 1.8, ease: 'power3.out' }, '<')
 
+      // Existing hero parallax (scroll-linked, preserved).
       gsap.to('.hero-image img', {
         yPercent: 12,
         ease: 'none',
@@ -49,14 +65,35 @@ export default function Hero() {
         ease: 'none',
         scrollTrigger: { trigger: root.current, start: 'top top', end: 'bottom top', scrub: true },
       })
+
+      // Refresh ScrollTrigger once the timeline has set its final layout.
+      tl.add(() => ScrollTrigger.refresh())
     }, root)
+
     return () => ctx.revert()
-  }, [loading, content.title])
+  }, [loading, content.title, introReady])
+
+  // Refresh ScrollTrigger when the (large) hero image finishes decoding so
+  // positions are measured against the real layout.
+  useEffect(() => {
+    const img = imgRef.current
+    if (!img) return
+    if (img.complete) {
+      const id = requestAnimationFrame(() => ScrollTrigger.refresh())
+      return () => cancelAnimationFrame(id)
+    }
+    const onLoad = () => {
+      requestAnimationFrame(() => requestAnimationFrame(() => ScrollTrigger.refresh()))
+    }
+    img.addEventListener('load', onLoad)
+    return () => img.removeEventListener('load', onLoad)
+  }, [content.background_image_url])
 
   return (
-    <section ref={root} className="relative h-[100svh] min-h-[600px] overflow-hidden">
+    <section ref={root} className="relative h-[100svh] min-h-[600px] overflow-hidden bg-ink">
       <div className="hero-image absolute inset-0 overflow-hidden">
         <img
+          ref={imgRef}
           src={content.background_image_url}
           alt={content.background_image_alt || 'SAIF STORE'}
           className="h-[115%] w-full object-cover"

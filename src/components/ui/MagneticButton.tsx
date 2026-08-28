@@ -53,7 +53,7 @@ export default function MagneticButton({
     )
   }
   return (
-    <button type={type} ref={ref} className={base} data-cursor="hover">
+    <button type={type} ref={ref as React.RefObject<HTMLButtonElement>} className={base} data-cursor="hover">
       {variant !== 'underline' && fill}{content}
     </button>
   )

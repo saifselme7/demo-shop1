@@ -1,5 +1,8 @@
 import { supabase } from '../lib/supabase'
 
+export type ManualPaymentMethod = 'cod' | 'instapay' | 'vodafone'
+export type PaymentStatus = 'pending' | 'proof_submitted' | 'approved' | 'rejected' | 'confirmed' | 'failed'
+
 export interface OrderInput {
   customer_name: string
   customer_email: string
@@ -10,6 +13,10 @@ export interface OrderInput {
   apartment?: string
   notes?: string
   payment_method: string
+  payment_reference?: string | null
+  payment_proof_path?: string | null
+  payment_proof_url?: string | null
+  payment_status?: PaymentStatus
   subtotal: number
   shipping: number
   total: number
@@ -52,6 +59,8 @@ export async function createOrder(input: OrderInput) {
     }
   }
 
+  const manualProofRequired = input.payment_method !== 'cod'
+
   const { data: order, error: orderError } = await supabase
     .from('orders')
     .insert({
@@ -65,7 +74,10 @@ export async function createOrder(input: OrderInput) {
       apartment: input.apartment || null,
       notes: input.notes || null,
       payment_method: input.payment_method,
-      payment_status: 'pending',
+      payment_status: input.payment_status || (manualProofRequired ? 'proof_submitted' : 'pending'),
+      payment_proof_url: input.payment_proof_url || null,
+      payment_proof_path: input.payment_proof_path || null,
+      payment_reference: input.payment_reference || null,
       order_status: 'pending',
       subtotal: input.subtotal,
       shipping: input.shipping,
