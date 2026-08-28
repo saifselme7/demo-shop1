@@ -53,6 +53,24 @@ export default function OrderSuccess() {
           Your order <span className="font-medium text-ink font-mono">{order.order_number}</span> has been submitted. SAIF STORE will review and confirm your order shortly. You will be contacted via email or phone.
         </p>
 
+        {order.payment_method === 'instapay' || order.payment_method === 'vodafone' ? (
+          <div className="mt-6 border border-line bg-cream px-4 py-3 text-[12px] md:text-[13px] leading-relaxed">
+            <span className="eyebrow mb-2 block">— Manual payment</span>
+            {order.payment_status === 'proof_submitted'
+              ? 'Your payment screenshot has been received and is awaiting verification. Your order will be confirmed once the payment is approved.'
+              : order.payment_status === 'approved'
+                ? 'Your payment has been verified. Your order is being processed.'
+                : order.payment_status === 'rejected'
+                  ? 'We could not verify your payment — our team will contact you shortly.'
+                  : 'Your payment is pending review.'}
+          </div>
+        ) : (
+          <div className="mt-6 border border-line bg-cream px-4 py-3 text-[12px] md:text-[13px] leading-relaxed">
+            <span className="eyebrow mb-2 block">— Cash on Delivery</span>
+            Pay in cash when your order arrives.
+          </div>
+        )}
+
         <div className="mt-10 md:mt-12 grid md:grid-cols-2 gap-6">
           <div className="border border-line p-5 md:p-6 bg-cream">
             <span className="eyebrow mb-3 block">Order Details</span>

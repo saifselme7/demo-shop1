@@ -2,6 +2,12 @@ import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { gsap } from '../../lib/gsap'
 
+// Event name for the initial-load intro lifecycle.
+// Fired when the loader curtain begins its exit — this is the exact
+// moment the Hero entrance animation should start so it plays *with*
+// the top-to-bottom curtain reveal rather than behind a fixed delay.
+export const INTRO_HERO_PLAY_EVENT = 'saif:intro-hero-play'
+
 interface Props {
   onComplete?: () => void
 }
@@ -11,6 +17,14 @@ export default function Loader({ onComplete }: Props) {
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    let heroPlayFired = false
+    const fireHeroPlay = () => {
+      if (heroPlayFired) return
+      heroPlayFired = true
+      // Signal the Hero (and any intro-dependent animation) to begin.
+      window.dispatchEvent(new CustomEvent(INTRO_HERO_PLAY_EVENT))
+    }
+
     const ctx = gsap.context(() => {
       const counter = { v: 0 }
       gsap.to(counter, {
@@ -19,6 +33,10 @@ export default function Loader({ onComplete }: Props) {
         ease: 'power2.inOut',
         onUpdate: () => setCount(Math.floor(counter.v)),
         onComplete: () => {
+          // Start the Hero reveal exactly when the curtain begins to
+          // lift, so the existing reveal animates with the curtain.
+          fireHeroPlay()
+
           gsap.to('.loader-content', {
             yPercent: -100,
             duration: 0.8,
